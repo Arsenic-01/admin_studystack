@@ -1,5 +1,5 @@
 // middleware.ts
-/* import { withAuth } from "next-auth/middleware";
+import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
@@ -22,4 +22,3 @@ export default withAuth(
 export const config = {
   matcher: ["/admin/:path*"], // only protect /admin
 };
-*/
