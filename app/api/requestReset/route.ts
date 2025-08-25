@@ -1,10 +1,10 @@
 // pages/api/request-reset.ts
 import crypto from "crypto";
-import resend from "@/lib/resend";
 import { DATABASE_ID, db, Query, USER_COLLECTION_ID } from "@/lib/appwrite";
 import { NextRequest, NextResponse } from "next/server";
 import PasswordResetEmail from "@/emails/PasswordResetEmail";
 import React from "react";
+import resend from "@/lib/resend";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
