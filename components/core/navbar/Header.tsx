@@ -1,0 +1,263 @@
+"use client";
+
+import React from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { AnimatePresence, motion } from "framer-motion";
+import { useUser } from "@/hooks/useUser";
+import LoginButton from "../Button";
+import { ThemeToggle } from "./navbar_helper_components/ThemeSwitcher";
+
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+
+const ProfileCard = dynamic(
+  () => import("./navbar_helper_components/ProfileCard"),
+  { ssr: false }
+);
+
+const aboutLinks: { title: string; href: string; description: string }[] = [
+  {
+    title: "About Us",
+    href: "https://studystack01.vercel.app/about",
+    description: "Learn more about our mission, vision, and team.",
+  },
+  {
+    title: "Our Project",
+    href: "https://studystack01.vercel.app/about/project",
+    description: "Discover the details and technology behind StudyStack.",
+  },
+];
+
+const mainNavLinks = [
+  {
+    name: "Contact",
+    href: "https://studystack01.vercel.app/contact",
+    requiresAuth: false,
+  },
+  {
+    name: "FAQs",
+    href: "https://studystack01.vercel.app/home#faq",
+    requiresAuth: true,
+  },
+];
+
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const { user } = useUser();
+
+  // Filter links based on auth status
+  const visibleMainNavLinks = mainNavLinks.filter(
+    (link) => !link.requiresAuth || user
+  );
+
+  return (
+    <nav className="fixed top-0 w-full px-5 z-50" suppressHydrationWarning>
+      <div className="backdrop-blur-lg max-w-5xl mx-auto bg-white/80 dark:bg-neutral-950/50 border-[0.1px] border-neutral-300 sm:border-neutral-300 dark:border-neutral-800 rounded-xl py-2 mt-5 sm:mt-7 px-3 sm:pl-5 sm:pr-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 justify-end items-center">
+          {/* LEFT: Logo */}
+          <div className="flex items-center gap-7">
+            <Link
+              href={user ? "/admin" : "/"}
+              className="inline-flex gap-1 items-center justify-center"
+            >
+              <Image
+                src="/title_logo.png"
+                alt="Study Stack Logo"
+                width={35}
+                height={35}
+                className="select-none pointer-events-none invert dark:invert-0"
+              />
+              <span className="select-none pointer-events-none text-lg font-medium text-neutral-900 dark:text-neutral-50">
+                StudyStack
+              </span>
+            </Link>
+          </div>
+
+          <div className="hidden md:flex justify-center items-center gap-1">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>About</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[400px] gap-3 p-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                      {aboutLinks.map((component) => (
+                        <ListItem
+                          className=" hover:cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800/70 rounded-md"
+                          key={component.title}
+                          title={component.title}
+                          href={component.href}
+                        >
+                          {component.description}
+                        </ListItem>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                {visibleMainNavLinks.map((item) => (
+                  <NavigationMenuItem key={item.name}>
+                    <NavigationMenuLink
+                      className={twMerge(
+                        navigationMenuTriggerStyle(),
+                        pathname === item.href && "bg-accent"
+                      )}
+                      asChild
+                    >
+                      <Link href={item.href}>{item.name}</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))}
+
+                {user && "role" in user && user.role === "admin" && (
+                  <NavigationMenuItem>
+                    <NavigationMenuLink
+                      className={twMerge(
+                        navigationMenuTriggerStyle(),
+                        pathname.startsWith("/admin") && "bg-accent"
+                      )}
+                      asChild
+                    >
+                      <Link href="/admin">Admin</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                )}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
+          {/* RIGHT: Search + Theme toggle + Profile */}
+          <div className="flex items-center gap-2 sm:gap-3 justify-end">
+            <ThemeToggle />
+            <div>
+              {user ? (
+                <ProfileCard />
+              ) : (
+                <LoginButton text="Login" className="hidden md:block" />
+              )}
+            </div>
+            <div className="md:hidden flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-menu hover:cursor-pointer ml-1"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <line
+                  x1="3"
+                  y1="6"
+                  x2="21"
+                  y2="6"
+                  className={twMerge(
+                    "origin-left transition duration-75",
+                    isOpen && "rotate-45 -translate-y-1"
+                  )}
+                ></line>
+                <line
+                  x1="3"
+                  y1="12"
+                  x2="21"
+                  y2="12"
+                  className={twMerge(
+                    "transition duration-75",
+                    isOpen && "opacity-0"
+                  )}
+                ></line>
+                <line
+                  x1="3"
+                  y1="18"
+                  x2="21"
+                  y2="18"
+                  className={twMerge(
+                    "origin-left transition duration-75",
+                    isOpen && "-rotate-45 translate-y-1"
+                  )}
+                ></line>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div /* ... */>
+              <div className="flex flex-col items-center gap-4 md:hidden pb-5 pt-7">
+                {user && "role" in user && user.role === "admin" && (
+                  <Link href={`/admin`} className="... w-full text-center ...">
+                    Admin
+                  </Link>
+                )}
+                {/* Show grouped links individually on mobile */}
+                {aboutLinks.map((item) => (
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    className="... w-full text-center ..."
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+                {visibleMainNavLinks.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="... w-full text-center ..."
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </nav>
+  );
+};
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
+
+export default Header;
