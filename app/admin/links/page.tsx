@@ -305,7 +305,6 @@ export default function AdminLinksPage() {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              className="text-destructive"
                               onClick={() => setLinkToDelete(link)}
                             >
                               <Trash2 className="mr-2 h-4 w-4" /> Delete Link
@@ -355,10 +354,7 @@ export default function AdminLinksPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteLink}
-              className="bg-destructive hover:bg-destructive/90"
-            >
+            <AlertDialogAction onClick={handleDeleteLink}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
