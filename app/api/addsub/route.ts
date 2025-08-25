@@ -19,13 +19,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const sem = String(semester);
+    
 
     await db.createDocument(DATABASE_ID!, SUBJECT_COLLECTION_ID!, subjectId, {
       subjectId,
       name,
       code,
-      semester: sem,
+      semester,
       unit: units,
     });
 
