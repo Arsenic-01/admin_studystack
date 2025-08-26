@@ -83,7 +83,7 @@ export function RecentActivityFeed({ activities }: RecentActivityFeedProps) {
           ) : (
             <div className="relative space-y-6 pr-2">
               {/* Vertical timeline line */}
-              <div className="absolute left-4 top-2 bottom-2 w-0.5 bg-border" />
+              <div className="absolute left-5 top-2 bottom-2 w-0.5 bg-border" />
 
               {activities.map((activity, index) => {
                 const config = activityConfig[activity.type];
@@ -92,10 +92,10 @@ export function RecentActivityFeed({ activities }: RecentActivityFeedProps) {
                 return (
                   <div
                     key={index}
-                    className="relative flex items-start gap-4 group"
+                    className="relative flex items-start gap-4 group pl-1"
                   >
                     {/* Timeline Dot with Icon */}
-                    <div className="z-5 flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-background transition-transform group-hover:scale-110">
+                    <div className="z-5 flex h-8 w-8 items-center justify-center rounded-full transition-transform group-hover:scale-110">
                       <span
                         className={`flex h-full w-full items-center justify-center rounded-full ${config.bgColor}`}
                       >

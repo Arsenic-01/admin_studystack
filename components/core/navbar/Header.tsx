@@ -149,7 +149,10 @@ const Header = () => {
               {user ? (
                 <ProfileCard />
               ) : (
-                <RainbowButton onClick={() => router.push("/")}>
+                <RainbowButton
+                  className="hidden md:block"
+                  onClick={() => router.push("/")}
+                >
                   Login
                 </RainbowButton>
               )}

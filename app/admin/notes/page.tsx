@@ -193,7 +193,7 @@ export default function AdminNotesPage() {
           </p>
         </header>
 
-            <Card className="mt-3 md:mt-0">
+        <Card className="mt-3 md:mt-0 rounded-md">
           <CardHeader className="border-b">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <CardTitle>All Notes ({totalCount.toLocaleString()})</CardTitle>

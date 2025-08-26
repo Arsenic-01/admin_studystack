@@ -139,7 +139,7 @@ export default function AdminLinksPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
         <header>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Links Management
@@ -149,7 +149,7 @@ export default function AdminLinksPage() {
           </p>
         </header>
 
-        <Card className="mt-3 md:mt-0">
+        <Card className="mt-3 md:mt-0 rounded-md">
           <CardHeader className="border-b">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <CardTitle>All Links ({totalCount.toLocaleString()})</CardTitle>

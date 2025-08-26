@@ -163,7 +163,7 @@ export default function AdminUsersPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content: Table */}
           <div className="lg:col-span-3">
-            <Card className="mt-3 md:mt-0">
+            <Card className="mt-3 md:mt-0 rounded-md">
               <CardHeader className="border-b px-3">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-0">
                   <CardTitle>Users ({totalCount.toLocaleString()})</CardTitle>
