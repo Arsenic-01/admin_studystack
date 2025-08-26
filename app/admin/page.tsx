@@ -47,7 +47,7 @@ export default async function AdminOverviewPage() {
   ];
 
   return (
-    <main className="flex-1 space-y-6 py-4 px-0 md:p-6 xl:p-10">
+    <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mb-20 mt-1 md:mt-0">
       <div className="space-y-2">
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
           Dashboard

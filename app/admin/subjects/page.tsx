@@ -136,35 +136,38 @@ export default function AdminSubjectsPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10">
-        <header className="flex items-center justify-between">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
+        <header className="flex flex-col gap-3 md:flex-row items-start md:items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
               Subjects Management
             </h1>
             <p className="text-muted-foreground">
               Add, edit, and manage all course subjects.
             </p>
           </div>
-          <Button onClick={() => setCreateModalOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Add Subject
+          <Button
+            onClick={() => setCreateModalOpen(true)}
+            className="w-full md:w-fit"
+          >
+            <Plus className="h-4 w-4" /> Add Subject
           </Button>
         </header>
 
-        <Card>
+            <Card className="mt-3 md:mt-0">
           <CardHeader className="border-b">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <CardTitle>
                 All Subjects ({totalCount.toLocaleString()})
               </CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1 md:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div className="flex flex-col md:flex-row items-center gap-2 mt-3 md:mt-0">
+                <div className="relative w-full">
+                  <Search className="size-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                   <Input
                     placeholder="Search by name..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 w-full text-sm"
                   />
                 </div>
                 <Select

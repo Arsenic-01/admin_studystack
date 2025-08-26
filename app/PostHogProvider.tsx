@@ -9,11 +9,8 @@ import { useEffect } from "react";
 // Initialize PostHog once on the client
 if (typeof window !== "undefined") {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    capture_pageview: true, // Automatically capture pageviews
-
-    // --- ADD THIS LINE FOR DEBUGGING ---
-    // It will print helpful logs to your browser console
+    api_host: "/api/event",
+    capture_pageview: true,
     debug: process.env.NODE_ENV === "development",
   });
 }

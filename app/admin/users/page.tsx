@@ -145,7 +145,7 @@ export default function AdminUsersPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
         <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
@@ -163,7 +163,7 @@ export default function AdminUsersPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content: Table */}
           <div className="lg:col-span-3">
-            <Card className="">
+            <Card className="mt-3 md:mt-0">
               <CardHeader className="border-b px-3">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-0">
                   <CardTitle>Users ({totalCount.toLocaleString()})</CardTitle>

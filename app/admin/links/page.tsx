@@ -139,7 +139,7 @@ export default function AdminLinksPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 py-4 px-0 md:p-6 xl:p-10">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10">
         <header>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Links Management
@@ -149,50 +149,55 @@ export default function AdminLinksPage() {
           </p>
         </header>
 
-        <Card>
+        <Card className="mt-3 md:mt-0">
           <CardHeader className="border-b">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <CardTitle>All Links ({totalCount.toLocaleString()})</CardTitle>
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1 md:w-64">
+              <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-fit mt-3 md:mt-0">
+                <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search by title..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 text-sm w-full md:w-fit"
                   />
                 </div>
-                <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-full md:w-[180px]">
-                    <SelectValue placeholder="Filter by type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {allLinkTypes.map((type) => (
-                      <SelectItem
-                        key={type}
-                        value={type}
-                        className="capitalize"
-                      >
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={teacherFilter} onValueChange={setTeacherFilter}>
-                  <SelectTrigger className="w-full md:w-[180px]">
-                    <SelectValue placeholder="Filter by teacher" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Teachers</SelectItem>
-                    {filterOptions?.teacherOptions.map((teacher) => (
-                      <SelectItem key={teacher} value={teacher}>
-                        {teacher}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex gap-2 items-center w-full md:w-fit">
+                  <Select value={typeFilter} onValueChange={setTypeFilter}>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                      <SelectValue placeholder="Filter by type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {allLinkTypes.map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select
+                    value={teacherFilter}
+                    onValueChange={setTeacherFilter}
+                  >
+                    <SelectTrigger className="w-full md:w-[180px]">
+                      <SelectValue placeholder="Filter by teacher" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Teachers</SelectItem>
+                      {filterOptions?.teacherOptions.map((teacher) => (
+                        <SelectItem key={teacher} value={teacher}>
+                          {teacher}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </CardHeader>

@@ -115,7 +115,7 @@ const CreateSubjectModal = ({
                   <FormControl>
                     <Input
                       placeholder="Subject name"
-                      className="transition-all duration-200"
+                      className="transition-all duration-200 text-sm"
                       {...field}
                     />
                   </FormControl>
@@ -134,7 +134,7 @@ const CreateSubjectModal = ({
                     <FormControl>
                       <Input
                         placeholder="e.g. bms"
-                        className="transition-all duration-200"
+                        className="transition-all duration-200 text-sm"
                         {...field}
                       />
                     </FormControl>
@@ -152,7 +152,7 @@ const CreateSubjectModal = ({
                     <FormControl>
                       <Input
                         placeholder="e.g. 311302"
-                        className="transition-all duration-200"
+                        className="transition-all duration-200 text-sm"
                         {...field}
                       />
                     </FormControl>
@@ -171,7 +171,7 @@ const CreateSubjectModal = ({
                     <FormControl>
                       <Input
                         placeholder="e.g. 1"
-                        className="transition-all duration-200"
+                        className="transition-all duration-200 text-sm"
                         {...field}
                       />
                     </FormControl>
@@ -195,7 +195,7 @@ const CreateSubjectModal = ({
                   <Badge
                     key={field.id}
                     variant="secondary"
-                    className="pl-3 pr-2 py-1.5 flex items-center gap-1"
+                    className="pl-3 pr-2 py-1.5 flex items-center gap-1 text-sm"
                   >
                     {form.watch(`units.${index}`)}
                     <button
@@ -212,7 +212,7 @@ const CreateSubjectModal = ({
               <div className="flex gap-2 mt-2">
                 <Input
                   placeholder="Add a unit"
-                  className="transition-all duration-200"
+                  className="transition-all duration-200 text-sm"
                   value={newUnit}
                   onChange={(e) => setNewUnit(e.target.value)}
                   onKeyDown={(e) => {

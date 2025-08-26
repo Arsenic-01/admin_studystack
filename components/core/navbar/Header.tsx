@@ -4,7 +4,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
@@ -22,6 +22,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const ProfileCard = dynamic(
   () => import("./navbar_helper_components/ProfileCard"),
@@ -63,6 +64,8 @@ const Header = () => {
   const visibleMainNavLinks = mainNavLinks.filter(
     (link) => !link.requiresAuth || user
   );
+
+  const router = useRouter();
 
   return (
     <nav className="fixed top-0 w-full px-5 z-50" suppressHydrationWarning>
@@ -146,7 +149,9 @@ const Header = () => {
               {user ? (
                 <ProfileCard />
               ) : (
-                <LoginButton text="Login" className="hidden md:block" />
+                <RainbowButton onClick={() => router.push("/")}>
+                  Login
+                </RainbowButton>
               )}
             </div>
             <div className="md:hidden flex items-center">

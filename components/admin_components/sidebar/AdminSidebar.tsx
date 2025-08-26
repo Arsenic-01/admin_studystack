@@ -113,9 +113,9 @@ export function AdminSidebar({
             <Settings2 className="size-4" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">Admin Panel</span>
+            <span className="truncate font-semibold">StudyStack Admin</span>
             <span className="truncate text-xs text-muted-foreground">
-              Management Dashboard
+              Control Panel
             </span>
           </div>
         </div>

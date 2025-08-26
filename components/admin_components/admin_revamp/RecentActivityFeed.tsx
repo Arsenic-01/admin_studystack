@@ -74,7 +74,7 @@ export function RecentActivityFeed({ activities }: RecentActivityFeedProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[395px] pr-4">
+        <ScrollArea className="h-[343px] pr-4">
           {activities.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-muted-foreground pr-2">
               <Activity className="h-8 w-8 mb-2" />

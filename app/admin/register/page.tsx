@@ -90,16 +90,16 @@ function CsvUserImporter() {
 
       <div
         {...getRootProps()}
-        className={`mt-6 p-8 border-2 border-dashed rounded-xl cursor-pointer transition-colors
+        className={`mt-6 p-8 border-2  border-dashed rounded-xl cursor-pointer
         ${
           isDragActive
             ? "border-primary bg-primary/10"
-            : "border-border hover:border-primary/50"
+            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors"
         }`}
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center gap-4 text-muted-foreground">
-          <Upload className="w-12 h-12" />
+          <Upload className="size-10" />
           {isDragActive ? (
             <p className="font-semibold text-primary">Drop the file here...</p>
           ) : (
@@ -181,7 +181,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full lg:min-h-screen lg:grid lg:grid-cols-2">
+    <div className="w-full lg:min-h-[95vh] lg:grid lg:grid-cols-2">
       <div className="flex items-center justify-center p-4 py-10 lg:p-0">
         <div className="mx-auto grid w-[400px] gap-6">
           <div className="grid gap-1 md:gap-2 text-center">
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                   required
                   value={form.prnNo}
                   onChange={handleChange}
-                  className="pl-10 text-sm md:text-base"
+                  className="pl-10 text-sm"
                 />
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function RegisterPage() {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="pl-10 text-sm md:text-base"
+                  className="pl-10 text-sm "
                 />
               </div>
             </div>
@@ -238,7 +238,7 @@ export default function RegisterPage() {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="pl-10 text-sm md:text-base"
+                  className="pl-10 text-sm "
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function RegisterPage() {
                   required
                   value={form.password}
                   onChange={handleChange}
-                  className="pl-10 pr-10 text-sm md:text-base"
+                  className="pl-10 pr-10 text-sm "
                   placeholder="••••••••"
                 />
                 <button
@@ -298,7 +298,7 @@ export default function RegisterPage() {
           </form>
         </div>
       </div>
-      <div className="hidden bg-neutral-200 dark:bg-neutral-900 lg:flex items-center justify-center p-8">
+      <div className="hidden border-l-[0.2px] border-l-neutral-200 dark:border-l-neutral-800 bg-neutral-100 dark:bg-neutral-900 lg:flex items-center justify-center p-8">
         <CsvUserImporter />
       </div>
     </div>

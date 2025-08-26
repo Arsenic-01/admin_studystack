@@ -86,7 +86,7 @@ export function LoginForm() {
             value={prnNo}
             required
             onChange={(e) => setPrnNo(e.target.value)}
-            className="mt-1"
+            className="mt-1 text-sm"
             placeholder="Enter your PRN number"
             disabled={loading}
           />
@@ -111,7 +111,7 @@ export function LoginForm() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pr-10"
+              className="pr-10 text-sm"
               placeholder="Enter your password"
               disabled={loading}
             />
@@ -135,7 +135,7 @@ export function LoginForm() {
           )}
           <div className="mt-3">
             <Link
-              href={"/forgot-password"}
+              href={"https://studystack01.vercel.app/forgot-password"}
               className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
               Forgot your password?

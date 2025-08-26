@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-// Define a clear type for the session data we expect to return
+// Type for a single session we return to the frontend
 export interface UserSession {
   id: string;
   start_time: string;
@@ -13,21 +13,35 @@ export interface UserSession {
   os: string | null;
 }
 
+// Type for a single row returned by PostHog query
+type PostHogSessionRow = [
+  id: string,
+  start_time: string,
+  end_time: string | null,
+  duration_seconds: number | null,
+  browser: string | null,
+  os: string | null
+];
+
+// Expected shape of PostHog query response
+interface PostHogQueryResponse {
+  results: PostHogSessionRow[];
+}
+
 export async function GET(
   request: Request,
   { params }: { params: { userId: string } }
 ) {
   const { userId } = params;
   const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get("limit") || "10", 10);
-  const offset = parseInt(searchParams.get("offset") || "0", 10);
+  const limit = Number(searchParams.get("limit") ?? 10);
+  const offset = Number(searchParams.get("offset") ?? 0);
 
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
 
   try {
-    // This HogQL query fetches session data for a specific person ID
     const hogqlQuery = `
       SELECT
         session_id,
@@ -61,16 +75,18 @@ export async function GET(
       throw new Error(`PostHog API responded with status ${response.status}`);
     }
 
-    const queryResponse = await response.json();
+    const queryResponse: PostHogQueryResponse = await response.json();
 
-    const sessions: UserSession[] = queryResponse.results.map((row: any) => ({
-      id: row[0],
-      start_time: row[1],
-      end_time: row[2],
-      duration_seconds: row[3],
-      browser: row[4],
-      os: row[5],
-    }));
+    const sessions: UserSession[] = queryResponse.results.map(
+      (row: PostHogSessionRow): UserSession => ({
+        id: row[0],
+        start_time: row[1],
+        end_time: row[2],
+        duration_seconds: row[3],
+        browser: row[4],
+        os: row[5],
+      })
+    );
 
     return NextResponse.json({
       sessions,
