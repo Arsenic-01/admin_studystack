@@ -145,7 +145,7 @@ export default function AdminUsersPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:py-8 xl:px-10 mt-1 md:mt-0 mb-20">
         <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">

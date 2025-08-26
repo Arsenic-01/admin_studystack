@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 interface PostHogQueryResponse {
-  // day (ISO string) + wau (unique users)
   results: [string, number][];
 }
 
@@ -15,12 +14,18 @@ interface DailyActiveUser {
 
 export async function GET() {
   try {
+    // UPDATED HOGQL QUERY:
+    // 1. Counts DISTINCT person.properties.email instead of person_id.
+    // 2. Adds a WHERE clause to ensure only identified users (with an email) are counted.
     const hogqlQuery = `
       SELECT 
         toStartOfDay(timestamp) as day,
-        count(DISTINCT person_id) as wau
+        count(DISTINCT person.properties.email) as dau
       FROM events
-      WHERE event = '$pageview' AND timestamp >= now() - INTERVAL 7 DAY
+      WHERE 
+        event = '$pageview' AND 
+        timestamp >= now() - INTERVAL 7 DAY AND
+        person.properties.email IS NOT NULL
       GROUP BY day
       ORDER BY day ASC
     `;
@@ -47,12 +52,12 @@ export async function GET() {
     const queryResponse: PostHogQueryResponse = await response.json();
 
     const formattedData: DailyActiveUser[] = queryResponse.results.map(
-      ([day, wau]) => ({
+      ([day, dau]) => ({
         date: new Date(day).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
         }),
-        users: wau,
+        users: dau,
       })
     );
 

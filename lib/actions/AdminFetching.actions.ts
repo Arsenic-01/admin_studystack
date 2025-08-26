@@ -10,7 +10,18 @@ import {
   YOUTUBE_COLLECTION_ID,
   FORM_COLLECTION_ID,
   SUBJECT_COLLECTION_ID,
+  STATS_COLLECTION_ID,
+  STATS_DOCUMENT_ID,
+  functions,
 } from "@/lib/appwrite";
+
+export interface TeacherContributionDetail {
+  name: string;
+  notes: number;
+  forms: number;
+  youtube: number;
+  total: number;
+}
 
 // ============================================
 // DASHBOARD STATS
@@ -81,66 +92,26 @@ export async function fetchAdminDashboardStats() {
 }
 
 // ============================================
-// RECENT ACTIVITY
+// RECENT ACTIVITY (NOW POWERED BY APPWRITE FUNCTION)
 // ============================================
 
 export async function fetchRecentActivity() {
   try {
-    const [recentNotes, recentUsers, recentYoutube, recentForms] =
-      await Promise.all([
-        db.listDocuments(DATABASE_ID!, NOTE_COLLECTION_ID!, [
-          Query.orderDesc("$createdAt"),
-          Query.limit(3),
-        ]),
-        db.listDocuments(DATABASE_ID!, USER_COLLECTION_ID!, [
-          Query.orderDesc("$createdAt"),
-          Query.limit(2),
-        ]),
-        db.listDocuments(DATABASE_ID!, YOUTUBE_COLLECTION_ID!, [
-          Query.orderDesc("$createdAt"),
-          Query.limit(2),
-        ]),
-        db.listDocuments(DATABASE_ID!, FORM_COLLECTION_ID!, [
-          Query.orderDesc("$createdAt"),
-          Query.limit(3),
-        ]),
-      ]);
-
-    const activities = [
-      ...recentNotes.documents.map((doc) => ({
-        type: "note" as const,
-        title: doc.title,
-        user: doc.userName || "Unknown",
-        timestamp: doc.$createdAt,
-      })),
-      ...recentUsers.documents.map((doc) => ({
-        type: "user" as const,
-        title: `New ${doc.role} registered`,
-        user: doc.name,
-        timestamp: doc.$createdAt,
-      })),
-      ...recentYoutube.documents.map((doc) => ({
-        type: "youtube" as const,
-        title: doc.title,
-        user: doc.createdBy,
-        timestamp: doc.$createdAt,
-      })),
-      ...recentForms.documents.map((doc) => ({
-        type: "form" as const,
-        title: doc.title,
-        user: doc.createdBy,
-        timestamp: doc.$createdAt,
-      })),
-    ];
-
-    activities.sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    // 1. Call the Appwrite Function to get the accurately sorted recent activities
+    const response = await functions.createExecution(
+      process.env.APPWRITE_ACTIVITY_FUNC_ID!
     );
-    return activities.slice(0, 8);
+
+    if (response.responseStatusCode !== 200) {
+      console.error("Appwrite function execution failed:", response);
+      throw new Error("Failed to execute recent activity function");
+    }
+
+    // 2. Parse the response and return it
+    return JSON.parse(response.responseBody);
   } catch (error) {
-    console.error("Error fetching recent activity:", error);
-    return [];
+    console.error("Error fetching recent activity from function:", error);
+    return []; // Return empty array as a fallback
   }
 }
 
@@ -429,6 +400,29 @@ export async function getSemesterOptions() {
     return ["1", "2", "3", "4", "5", "6"];
   } catch (error) {
     console.error("Error generating semester options:", error);
+    return [];
+  }
+}
+
+export async function fetchTeacherContributions(): Promise<
+  TeacherContributionDetail[]
+> {
+  try {
+    // 1. Fetch the single, pre-calculated document from our AdminStats collection
+    const statsDoc = await db.getDocument(
+      DATABASE_ID!,
+      STATS_COLLECTION_ID!,
+      STATS_DOCUMENT_ID!
+    );
+
+    // 2. The data is stored as a JSON string, so we need to parse it
+    return JSON.parse(statsDoc.data);
+  } catch (error) {
+    console.error(
+      "Failed to fetch pre-calculated teacher contributions:",
+      error
+    );
+    // Return empty array as a fallback if the stats haven't been generated yet
     return [];
   }
 }

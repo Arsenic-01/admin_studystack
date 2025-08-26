@@ -136,7 +136,7 @@ export default function AdminSubjectsPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:py-8 xl:px-10 mt-1 md:mt-0 mb-20">
         <header className="flex flex-col gap-3 md:flex-row items-start md:items-center justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">

@@ -183,7 +183,7 @@ export default function AdminNotesPage() {
 
   return (
     <>
-      <main className="flex-1 space-y-6 p-4 md:p-6 xl:p-10 mt-1 md:mt-0 mb-20">
+      <main className="flex-1 space-y-6 p-4 md:p-6 xl:py-8 xl:px-10 mt-1 md:mt-0 mb-20">
         <header>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Notes Management

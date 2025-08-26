@@ -1,4 +1,4 @@
-import { Client, Databases, Query, Storage } from "node-appwrite";
+import { Client, Databases, Functions, Query, Storage } from "node-appwrite";
 
 // Initialize Appwrite Client
 const client = new Client()
@@ -9,8 +9,9 @@ const client = new Client()
 // Initialize Appwrite Database
 const db = new Databases(client);
 const storage = new Storage(client);
+const functions = new Functions(client);
 
-export { client, db, Query, storage };
+export { client, db, Query, storage, functions };
 
 export const {
   NEXT_PUBLIC_ENDPOINT: ENDPOINT,
@@ -25,4 +26,6 @@ export const {
   SESSION_COLLECTION_ID,
   LOGIN_COLLECTION_ID,
   FORM_COLLECTION_ID,
+  STATS_COLLECTION_ID,
+  STATS_DOCUMENT_ID,
 } = process.env;

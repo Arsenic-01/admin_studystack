@@ -69,7 +69,7 @@ const contentItems = [
     title: "Subjects",
     url: "/admin/subjects",
     icon: BookOpen,
-    description: "Configure subjects and curricula",
+    description: "Configure subjects and curriculum",
   },
 ];
 

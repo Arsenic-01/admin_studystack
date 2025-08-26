@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Users } from "lucide-react";
+import { User, Users, Users2Icon } from "lucide-react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
 import {
@@ -71,7 +71,10 @@ export function UserRoleDistributionChart({ data }: Props) {
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <CardTitle>User Role Distribution</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <User className="size-5" />
+            User Role Distribution{" "}
+          </CardTitle>
           <CardDescription>
             Total users on the platform: {totalUsers}
           </CardDescription>
