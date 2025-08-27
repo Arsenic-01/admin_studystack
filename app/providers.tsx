@@ -5,6 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
 import { UserProvider } from "@/hooks/useUser";
 import { PostHogProvider } from "./PostHogProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,6 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <HeroUIProvider>
             <NextThemesProvider attribute="class" enableSystem>
               {children}
+              <Analytics />
             </NextThemesProvider>
           </HeroUIProvider>
         </PostHogProvider>
