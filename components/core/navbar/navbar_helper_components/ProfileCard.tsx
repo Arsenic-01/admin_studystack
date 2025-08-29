@@ -1,6 +1,7 @@
+// UserProfilePopover.tsx
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LogOut, KeyRound } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/hooks/useUser";
+import { ChangePasswordDialog } from "../../auth/auth_helper_components/ChangePasswordDialog";
 
 const getInitials = (name: string) => {
   return name
@@ -66,9 +68,19 @@ export default function UserProfilePopover() {
         <Separator />
 
         <div className="p-1">
+          <ChangePasswordDialog>
+            <Button
+              className="w-full justify-between h-9 rounded-sm"
+              variant="ghost"
+            >
+              <span>Change Password</span>
+              <KeyRound className="size-3" />
+            </Button>
+          </ChangePasswordDialog>
+
           <Button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="w-full justify-between h-9 rounded-sm "
+            className="w-full justify-between h-9 rounded-sm"
             variant="ghost"
           >
             <span>Logout</span>
