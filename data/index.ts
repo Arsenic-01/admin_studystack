@@ -1,21 +1,37 @@
 import { FaGlobe, FaInstagram, FaYoutube } from "react-icons/fa6";
 
-export const footerLinks = [
+export const hostedAt = "https://studystack01.vercel.app";
+
+export const mainFooterLinks = [
   {
-    title: "KKWP",
-    href: "https://poly.kkwagh.edu.in/",
-  },
-  {
-    title: "About",
-    href: "https://studystack01.vercel.app/about",
+    title: "MSBTE",
+    href: "https://msbte.org.in/",
   },
   {
     title: "Contact",
-    href: "https://studystack01.vercel.app/contact",
+    href: `${hostedAt}/contact`,
+  },
+];
+
+export const aboutPopoverLinks = [
+  {
+    title: "Our Team",
+    href: `${hostedAt}/about`,
   },
   {
-    title: "MSBTE",
-    href: "https://msbte.ac.in/",
+    title: "The Project",
+    href: `${hostedAt}/about/project`,
+  },
+];
+
+export const legalPopoverLinks = [
+  {
+    title: "Privacy Policy",
+    href: `${hostedAt}/privacy-policy`,
+  },
+  {
+    title: "Cookie Policy",
+    href: `${hostedAt}/cookie-policy`,
   },
 ];
 

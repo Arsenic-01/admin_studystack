@@ -1,6 +1,7 @@
 // app/admin/register/page.tsx
 "use client";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,10 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { importUsersFromCsv } from "@/lib/actions/Admin.actions";
 import { signUpFormSchema } from "@/lib/validation_schema/validation";
 import {
+  AlertTriangle,
   Eye,
   EyeOff,
   FileDown,
@@ -24,7 +25,6 @@ import {
   Upload,
   User,
   UserSquare,
-  AlertTriangle,
 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { useDropzone } from "react-dropzone";

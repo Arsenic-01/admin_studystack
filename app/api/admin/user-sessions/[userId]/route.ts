@@ -1,7 +1,9 @@
-// app/api/admin/user-sessions/[userId]/route.ts
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
+
+// Define the activity threshold in minutes
+const ACTIVITY_THRESHOLD_MINUTES = 30;
 
 export interface UserSession {
   id: string;
@@ -10,6 +12,7 @@ export interface UserSession {
   duration_seconds: number | null;
   browser: string | null;
   os: string | null;
+  isActive: boolean;
 }
 
 interface PostHogQueryResponse {
@@ -37,6 +40,7 @@ export async function GET(
   }
 
   try {
+    // The HogQL query remains the same
     const hogqlQuery = `
       SELECT
         properties.$session_id,
@@ -77,16 +81,30 @@ export async function GET(
     }
 
     const queryResponse: PostHogQueryResponse = await response.json();
+    const now = new Date(); // Get current time once for comparison
 
     const sessions: UserSession[] = queryResponse.results.map(
-      ([id, start_time, end_time, duration_seconds, browser, os]) => ({
-        id,
-        start_time,
-        end_time,
-        duration_seconds,
-        browser,
-        os,
-      })
+      ([id, start_time, end_time, duration_seconds, browser, os]) => {
+        // Determine if the session is active
+        const lastSeen = new Date(end_time!); // end_time is the timestamp of the last event
+        const diffMinutes = (now.getTime() - lastSeen.getTime()) / (1000 * 60);
+        const isActive = diffMinutes < ACTIVITY_THRESHOLD_MINUTES;
+
+        // For active sessions, calculate duration from start time until now for a "live" feel
+        const currentDuration = isActive
+          ? Math.round((now.getTime() - new Date(start_time).getTime()) / 1000)
+          : duration_seconds;
+
+        return {
+          id,
+          start_time,
+          end_time,
+          duration_seconds: currentDuration,
+          browser,
+          os,
+          isActive,
+        };
+      }
     );
 
     return NextResponse.json({

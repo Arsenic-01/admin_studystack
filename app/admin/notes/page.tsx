@@ -56,31 +56,29 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
+  Atom,
+  BookOpen,
+  ClipboardCheck,
   Edit,
   ExternalLink,
+  FileCode,
+  File as FileIcon,
   FileText,
+  FileVideo,
+  FlaskConical,
+  GraduationCap,
   MoreHorizontal,
+  Presentation,
   Search,
   ServerCrash,
   Trash2,
-  File as FileIcon,
-  Presentation,
-  ClipboardCheck,
-  FlaskConical,
-  BookOpen,
-  FileVideo,
-  FileCode,
-  GraduationCap,
-  Atom, // Icon for Animations
 } from "lucide-react";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-// Define a type for the note data that will be passed to the edit modal
 type NoteForEdit = Omit<EditNoteSchema, "noteId"> & { noteId: string };
 
-// Map file types to specific icons for a better visual experience
 const typeIcons: { [key: string]: React.ElementType } = {
   Notes: FileText,
   PPTS: Presentation,
@@ -223,7 +221,6 @@ export default function AdminNotesPage() {
                     </SelectContent>
                   </Select>
 
-                  {/* UNCHANGED: Filter by teacher dropdown (this was already correct) */}
                   <Select
                     value={teacherFilter}
                     onValueChange={setTeacherFilter}
@@ -233,7 +230,7 @@ export default function AdminNotesPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Teachers</SelectItem>
-                      {filterOptions?.teacherOptions.map((teacher) => (
+                      {filterOptions?.map((teacher) => (
                         <SelectItem key={teacher} value={teacher}>
                           {teacher}
                         </SelectItem>

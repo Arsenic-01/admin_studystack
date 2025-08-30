@@ -1,4 +1,3 @@
-// components/admin_components/admin_helper_components/UserLogsDialog.tsx
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -21,11 +20,12 @@ import {
   Terminal,
   Calendar,
 } from "lucide-react";
+// Import the UserSession type from the API route to ensure consistency
 import type { UserSession } from "@/app/api/admin/user-sessions/[userId]/route";
 
-// Helper function to format duration from seconds into a readable string
+// Helper function to format duration remains the same
 const formatDuration = (seconds: number | null) => {
-  if (seconds === null) return "N/A";
+  if (seconds === null || seconds < 0) return "N/A";
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m ${seconds % 60}s`;
@@ -33,7 +33,7 @@ const formatDuration = (seconds: number | null) => {
   return `${hours}h ${minutes % 60}m`;
 };
 
-// Fetcher function for React Query
+// Fetcher function remains the same
 const fetchUserSessions = async ({
   pageParam = 0,
   userId,
@@ -72,7 +72,7 @@ export function UserLogsDialog({
       return lastPage.hasNextPage ? allPages.length * 10 : undefined;
     },
     initialPageParam: 0,
-    enabled: !!user && open, // Only fetch when the dialog is open with a user
+    enabled: !!user && open,
   });
 
   const allSessions = data?.pages.flatMap((page) => page.sessions) ?? [];
@@ -114,16 +114,26 @@ export function UserLogsDialog({
                   className="flex items-center gap-4 p-3 rounded-lg border"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    {session.os?.toLowerCase().includes("windows") ? (
+                    {session.os?.toLowerCase().includes("windows") ||
+                    session.os?.toLowerCase().includes("mac") ? (
                       <Laptop />
                     ) : (
                       <Smartphone />
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold">
-                      {session.browser || "Unknown"} on{" "}
-                      {session.os || "Unknown OS"}
+                    <p className="font-semibold flex items-center gap-2">
+                      {/* Pulsating green dot for active sessions */}
+                      {session.isActive && (
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                      )}
+                      <span>
+                        {session.browser || "Unknown"} on{" "}
+                        {session.os || "Unknown OS"}
+                      </span>
                     </p>
                     <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                       <Calendar className="h-3 w-3" />
@@ -133,9 +143,19 @@ export function UserLogsDialog({
                       )}
                     </p>
                   </div>
-                  <Badge variant="outline">
-                    {formatDuration(session.duration_seconds)}
-                  </Badge>
+                  {/* Conditional badge for active vs. ended sessions */}
+                  {session.isActive ? (
+                    <Badge
+                      variant="default"
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      Active Now
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">
+                      {formatDuration(session.duration_seconds)}
+                    </Badge>
+                  )}
                 </div>
               ))}
               {hasNextPage && (

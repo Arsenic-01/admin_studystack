@@ -10,9 +10,10 @@ import {
   YOUTUBE_COLLECTION_ID,
   FORM_COLLECTION_ID,
   SUBJECT_COLLECTION_ID,
-  STATS_COLLECTION_ID,
+  CACHE_COLLECTION_ID,
   STATS_DOCUMENT_ID,
   functions,
+  UPLOADERS_CACHE_DOCUMENT_ID,
 } from "@/lib/appwrite";
 
 export interface TeacherContributionDetail {
@@ -218,23 +219,35 @@ export async function fetchPaginatedNotesForAdmin({
     return { documents: [], total: 0 };
   }
 }
+interface UploaderCache {
+  all: string[];
+  [subjectAbbreviation: string]: string[];
+}
 
-export async function getNotesFilterOptions() {
+async function getUploaderOptions(): Promise<UploaderCache> {
   try {
-    const response = await db.listDocuments(DATABASE_ID!, USER_COLLECTION_ID!, [
-      Query.equal("role", "teacher"),
-      Query.limit(100),
-      Query.select(["name"]),
-    ]);
-    const teacherOptions = [
-      ...new Set(response.documents.map((doc) => doc.name).filter(Boolean)),
-    ];
-    teacherOptions.sort();
-    return { teacherOptions };
+    const document = await db.getDocument(
+      DATABASE_ID!,
+      CACHE_COLLECTION_ID!,
+      UPLOADERS_CACHE_DOCUMENT_ID!
+    );
+
+    // The data is stored as a string, so we need to parse it
+    if (document.data) {
+      return JSON.parse(document.data) as UploaderCache;
+    }
+
+    return { all: [] }; // Return empty state if data is not available
   } catch (error) {
-    console.error("Error fetching filter options:", error);
-    return { teacherOptions: [] };
+    console.error("Error fetching uploader cache:", error);
+    // Return a default empty object on error so the UI doesn't crash
+    return { all: [] };
   }
+}
+
+export async function getAllUploaders() {
+  const options = await getUploaderOptions();
+  return options.all || [];
 }
 
 export interface AdminLink {
@@ -411,7 +424,7 @@ export async function fetchTeacherContributions(): Promise<
     // 1. Fetch the single, pre-calculated document from our AdminStats collection
     const statsDoc = await db.getDocument(
       DATABASE_ID!,
-      STATS_COLLECTION_ID!,
+      CACHE_COLLECTION_ID!,
       STATS_DOCUMENT_ID!
     );
 

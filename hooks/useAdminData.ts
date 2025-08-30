@@ -8,7 +8,7 @@ import {
   fetchPaginatedSubjects,
   fetchPaginatedUsers,
   getLinksFilterOptions,
-  getNotesFilterOptions,
+  getAllUploaders,
   getSemesterOptions,
 } from "@/lib/actions/AdminFetching.actions";
 import { deleteFormLink, editFormLink } from "@/lib/actions/Form.actions";
@@ -101,7 +101,7 @@ export function useAdminNotes({
 export function useNotesFilterOptions() {
   return useQuery({
     queryKey: ["notes-filter-options"],
-    queryFn: getNotesFilterOptions,
+    queryFn: getAllUploaders,
     staleTime: 15 * 60 * 1000,
   });
 }

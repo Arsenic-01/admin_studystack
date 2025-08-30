@@ -1,6 +1,8 @@
 // app/admin/subjects/page.tsx
 "use client";
 
+import CreateSubjectModal from "@/components/admin_components/admin_helper_components/subject_crud/CreateSubjectModal";
+import EditSubjectModal from "@/components/admin_components/admin_helper_components/subject_crud/EditSubjectModal";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -62,10 +64,8 @@ import {
   ServerCrash,
   Trash2,
 } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import CreateSubjectModal from "@/components/admin_components/admin_helper_components/subject_crud/CreateSubjectModal";
-import EditSubjectModal from "@/components/admin_components/admin_helper_components/subject_crud/EditSubjectModal";
 
 export default function AdminSubjectsPage() {
   const [search, setSearch] = useState("");

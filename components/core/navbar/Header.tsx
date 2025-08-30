@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { cn } from "@/lib/utils";
+import { hostedAt } from "@/data";
 
 const ProfileCard = dynamic(
   () => import("./navbar_helper_components/ProfileCard"),
@@ -30,12 +31,12 @@ const ProfileCard = dynamic(
 const aboutLinks: { title: string; href: string; description: string }[] = [
   {
     title: "About Us",
-    href: "https://studystack01.vercel.app/about",
+    href: `${hostedAt}/about`,
     description: "Learn more about our mission, vision, and team.",
   },
   {
     title: "Our Project",
-    href: "https://studystack01.vercel.app/about/project",
+    href: `${hostedAt}/about/project`,
     description: "Discover the details and technology behind StudyStack.",
   },
 ];
@@ -43,12 +44,12 @@ const aboutLinks: { title: string; href: string; description: string }[] = [
 const mainNavLinks = [
   {
     name: "Contact",
-    href: "https://studystack01.vercel.app/contact",
+    href: `${hostedAt}/contact`,
     requiresAuth: false,
   },
   {
     name: "FAQs",
-    href: "https://studystack01.vercel.app/home#faq",
+    href: `${hostedAt}/home#faq`,
     requiresAuth: true,
   },
 ];
@@ -255,19 +256,19 @@ const ListItem = React.forwardRef<
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
+        <Link
           ref={ref}
+          href={props.href || "#"}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
-          {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
-        </a>
+        </Link>
       </NavigationMenuLink>
     </li>
   );
