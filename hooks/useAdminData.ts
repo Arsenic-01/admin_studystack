@@ -13,6 +13,7 @@ import {
 } from "@/lib/actions/AdminFetching.actions";
 import { deleteFormLink, editFormLink } from "@/lib/actions/Form.actions";
 import { deleteNote } from "@/lib/actions/Notes.actions";
+import { triggerRevalidation } from "@/lib/actions/revalidate";
 import {
   createSubject,
   deleteSubject,
@@ -22,7 +23,6 @@ import {
   deleteYoutubeLink,
   editYoutubeLink,
 } from "@/lib/actions/Youtube.actions";
-import { functions } from "@/lib/appwrite";
 import { Subject } from "@/lib/appwrite_types";
 import {
   useInfiniteQuery,
@@ -220,6 +220,10 @@ export function useDeleteLink() {
 // SUBJECTS HOOKS
 // ============================================
 
+const onMutationSuccess = () => {
+  triggerRevalidation("subjects");
+};
+
 export function useAdminSubjects({
   search = "",
   semesterFilter = "all",
@@ -251,7 +255,7 @@ export function useSemesterOptions() {
   return useQuery({
     queryKey: ["semester-options"],
     queryFn: getSemesterOptions,
-    staleTime: Infinity, // Semesters change infrequently
+    staleTime: Infinity,
   });
 }
 
@@ -261,6 +265,7 @@ export function useCreateSubject() {
     mutationFn: (subject: Omit<Subject, "subjectId">) => createSubject(subject),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-subjects"] });
+      onMutationSuccess();
     },
     onError: (error) => {
       console.error("Create subject error:", error);
@@ -274,6 +279,7 @@ export function useUpdateSubject() {
     mutationFn: (subject: Subject) => updateSubject(subject),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-subjects"] });
+      onMutationSuccess();
     },
     onError: (error) => {
       console.error("Update subject error:", error);
@@ -287,6 +293,7 @@ export function useDeleteSubject() {
     mutationFn: (subjectId: string) => deleteSubject({ subjectId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-subjects"] });
+      onMutationSuccess();
     },
     onError: (error) => {
       console.error("Delete subject error:", error);

@@ -11,7 +11,6 @@ import { ID } from "node-appwrite";
 export async function fetchUsers() {
   try {
     const response = await db.listDocuments(DATABASE_ID!, USER_COLLECTION_ID!);
-    // ("response", response);
 
     return response.documents.map((doc) => ({
       id: doc.$id,

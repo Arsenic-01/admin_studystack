@@ -1,6 +1,7 @@
 "use server";
 
 import { DATABASE_ID, db, NOTE_COLLECTION_ID } from "../appwrite";
+import { getDriveClient } from "../googleDrive";
 
 interface DeleteNoteParams {
   noteId: string;
@@ -9,6 +10,11 @@ interface DeleteNoteParams {
 
 export async function deleteNote({ noteId, fileId }: DeleteNoteParams) {
   try {
+    const drive = await getDriveClient();
+    await drive.files.delete({
+      fileId: fileId,
+    });
+
     await db.deleteDocument(DATABASE_ID!, NOTE_COLLECTION_ID!, noteId);
 
     return { success: true };

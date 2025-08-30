@@ -1,15 +1,13 @@
 "use client";
 
-import React from "react";
+import { useUser } from "@/hooks/useUser";
+import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { AnimatePresence, motion } from "framer-motion";
-import { useUser } from "@/hooks/useUser";
-import LoginButton from "../Button";
 import { ThemeToggle } from "./navbar_helper_components/ThemeSwitcher";
 
 import {
@@ -21,8 +19,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { cn } from "@/lib/utils";
 
 const ProfileCard = dynamic(
   () => import("./navbar_helper_components/ProfileCard"),
@@ -168,7 +166,7 @@ const Header = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="feather feather-menu hover:cursor-pointer ml-1"
+                className="feather feather-menu hover:cursor-pointer mr-1"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 <line
@@ -207,19 +205,27 @@ const Header = () => {
         </div>
         <AnimatePresence>
           {isOpen && (
-            <motion.div /* ... */>
+            <motion.div
+              initial={{ height: 0 }}
+              animate={{ height: "auto" }}
+              transition={{ duration: 0.01, ease: "easeInOut" }}
+              exit={{ height: 0 }}
+              className="overflow-hidden"
+            >
               <div className="flex flex-col items-center gap-4 md:hidden pb-5 pt-7">
                 {user && "role" in user && user.role === "admin" && (
-                  <Link href={`/admin`} className="... w-full text-center ...">
+                  <Link
+                    href={`/admin`}
+                    className="text-neutral-900/80 hover:text-neutral-900 dark:text-neutral-50 dark:hover:text-neutral-50 w-full text-center rounded-xl py-1 dark:active:bg-neutral-800 dark:hover:bg-neutral-800 active:bg-neutral-200 hover:bg-neutral-200 transition-all ease-in-out"
+                  >
                     Admin
                   </Link>
                 )}
-                {/* Show grouped links individually on mobile */}
                 {aboutLinks.map((item) => (
                   <Link
                     key={item.title}
                     href={item.href}
-                    className="... w-full text-center ..."
+                    className="text-neutral-900/80 hover:text-neutral-900 dark:text-neutral-50 dark:hover:text-neutral-50 w-full text-center rounded-xl py-1 dark:active:bg-neutral-800 dark:hover:bg-neutral-800 active:bg-neutral-200 hover:bg-neutral-200 transition-all ease-in-out"
                   >
                     {item.title}
                   </Link>
@@ -228,7 +234,7 @@ const Header = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="... w-full text-center ..."
+                    className="text-neutral-900/80 hover:text-neutral-900 dark:text-neutral-50 dark:hover:text-neutral-50 w-full text-center rounded-xl py-1 dark:active:bg-neutral-800 dark:hover:bg-neutral-800 active:bg-neutral-200 hover:bg-neutral-200 transition-all ease-in-out"
                   >
                     {item.name}
                   </Link>

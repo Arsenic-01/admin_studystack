@@ -38,9 +38,12 @@ export default function UserProfilePopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback>
+        <Button
+          variant="ghost"
+          className="relative size-7 lg:size-9 rounded-full"
+        >
+          <Avatar className="size-7 lg:size-9">
+            <AvatarFallback className="text-sm lg:text-base">
               {user.name ? getInitials(user.name) : "U"}
             </AvatarFallback>
           </Avatar>
