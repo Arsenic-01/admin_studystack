@@ -22,14 +22,14 @@ import { Loader2, AlertTriangle, FileText, BarChartIcon } from "lucide-react";
 const fetchTopPages = async () => {
   const res = await fetch("/api/admin/trends/top-pages");
   if (!res.ok) throw new Error("Failed to fetch top pages");
-  // Assuming the API returns an array of objects like { path: string, views: number }
+  // Assuming the API returns an array of objects like { path: string, visitors: number }
   return res.json();
 };
 
 // Updated chart configuration for a new look
 const chartConfig = {
-  views: {
-    label: "Views",
+  visitors: {
+    label: "visitors",
     color: "var(--chart-6)",
   },
   label: {
@@ -39,7 +39,7 @@ const chartConfig = {
 
 export function TopContentList() {
   const { data, isLoading, error } = useQuery<
-    { path: string; views: number }[]
+    { path: string; visitors: number }[]
   >({
     queryKey: ["topPages"],
     queryFn: fetchTopPages,
@@ -114,7 +114,7 @@ export function TopContentList() {
                 cursor={false}
                 content={<ChartTooltipContent indicator="line" />}
               />
-              <Bar dataKey="views" fill="var(--color-views)" radius={5}>
+              <Bar dataKey="visitors" fill="var(--color-visitors)" radius={5}>
                 {/* Label for the page path, displayed inside the bar */}
                 <LabelList
                   dataKey="formattedPath"
@@ -125,7 +125,7 @@ export function TopContentList() {
                 />
                 {/* Label for the view count, displayed outside the bar */}
                 <LabelList
-                  dataKey="views"
+                  dataKey="visitors"
                   position="right"
                   offset={8}
                   className="fill-foreground font-semibold"

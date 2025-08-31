@@ -15,6 +15,7 @@ import {
   STATS_DOCUMENT_ID,
   functions,
   UPLOADERS_CACHE_DOCUMENT_ID,
+  LINKS_UPLOADERS_CACHE_ID,
 } from "@/lib/appwrite";
 
 export interface TeacherContributionDetail {
@@ -349,18 +350,25 @@ export async function fetchPaginatedLinksForAdmin({
 
 export async function getLinksFilterOptions() {
   try {
-    const response = await db.listDocuments(DATABASE_ID!, USER_COLLECTION_ID!, [
-      Query.equal("role", "teacher"),
-      Query.limit(100),
-      Query.select(["name"]),
-    ]);
-    const teacherOptions = [
-      ...new Set(response.documents.map((doc) => doc.name).filter(Boolean)),
-    ];
-    teacherOptions.sort();
-    return { teacherOptions };
+    // 1. Fetch the single cache document. This is a very fast operation.
+    const cacheDocument = await db.getDocument(
+      DATABASE_ID!,
+      CACHE_COLLECTION_ID!,
+      LINKS_UPLOADERS_CACHE_ID!
+    );
+
+    // 2. Parse the JSON data stored in the 'data' attribute.
+    if (cacheDocument.data) {
+      const parsedData = JSON.parse(cacheDocument.data);
+      // The function returns the array of uploader names, already sorted by the server function.
+      return { teacherOptions: parsedData.uploaders || [] };
+    }
+
+    // Return empty if the cache document has no data
+    return { teacherOptions: [] };
   } catch (error) {
-    console.error("Error fetching links filter options:", error);
+    console.error("Error fetching link uploader cache:", error);
+    // On failure, return an empty array to prevent the UI from crashing.
     return { teacherOptions: [] };
   }
 }

@@ -164,7 +164,7 @@ export default function AdminSubjectsPage() {
                 <div className="relative w-full">
                   <Search className="size-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                   <Input
-                    placeholder="Search by name..."
+                    placeholder="Search by name"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="pl-10 w-full text-sm"

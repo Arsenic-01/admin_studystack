@@ -1,12 +1,13 @@
-// app/api/admin/trends/top-users/route.ts
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+// The shape of the data returned by the PostHog query
 interface PostHogQueryResponse {
   results: [string | null, string | null, number][];
 }
 
+// The final formatted shape for our API response
 interface TopUser {
   name: string;
   activity: number;
@@ -14,11 +15,13 @@ interface TopUser {
 
 export async function GET() {
   try {
+    // This query now counts the number of *distinct URLs* a user has visited.
     const hogqlQuery = `
       SELECT
         person.properties.name as name,
         person.properties.email as email,
-        count() as pageviews
+        -- MODIFICATION: Use count(DISTINCT ...) to count unique pages
+        count(DISTINCT properties.$current_url) as unique_pageviews
       FROM
         events
       WHERE
@@ -29,7 +32,8 @@ export async function GET() {
         person.properties.name,
         person.properties.email
       ORDER BY
-        pageviews DESC
+        -- MODIFICATION: Order by the new unique_pageviews count
+        unique_pageviews DESC
       LIMIT 5
     `;
 
@@ -47,21 +51,28 @@ export async function GET() {
     });
 
     if (!response.ok) {
+      const errorBody = await response.text();
+      console.error("PostHog API Error:", errorBody);
       throw new Error(`PostHog API responded with status ${response.status}`);
     }
 
     const queryResponse: PostHogQueryResponse = await response.json();
 
     const formattedData: TopUser[] = queryResponse.results.map(
-      ([name, email, pageviews]) => ({
+      ([name, email, unique_pageviews]) => ({
+        // Use name, fallback to email, then to "Unknown"
         name: name ?? email ?? "Unknown",
-        activity: pageviews,
+        // This 'activity' now represents the count of unique pages visited
+        activity: unique_pageviews,
       })
     );
 
     return NextResponse.json(formattedData);
   } catch (error) {
-    console.error("Error fetching top users from PostHog:", error);
+    console.error(
+      "Error fetching top users by unique page views from PostHog:",
+      error
+    );
     return NextResponse.json(
       { error: "Failed to fetch top users" },
       { status: 500 }
