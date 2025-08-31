@@ -1,3 +1,5 @@
+// lib/api/addsub/route.ts
+
 import { DATABASE_ID, db, SUBJECT_COLLECTION_ID } from "@/lib/appwrite";
 import { NextResponse } from "next/server";
 
@@ -18,8 +20,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    
 
     await db.createDocument(DATABASE_ID!, SUBJECT_COLLECTION_ID!, subjectId, {
       subjectId,

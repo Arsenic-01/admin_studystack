@@ -1,3 +1,5 @@
+// lib/appwrite.ts
+
 import { Client, Databases, Functions, Query, Storage } from "node-appwrite";
 
 // Initialize Appwrite Client

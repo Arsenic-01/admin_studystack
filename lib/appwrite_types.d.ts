@@ -1,3 +1,5 @@
+// lib/appwrite_types.d.ts
+
 interface UserProps {
   userId: string;
   name: string;

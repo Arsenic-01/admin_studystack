@@ -1,3 +1,5 @@
+// app/api/change-password/route.ts
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { db, DATABASE_ID, USER_COLLECTION_ID, Query } from "@/lib/appwrite";

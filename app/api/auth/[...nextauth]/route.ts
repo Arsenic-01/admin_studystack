@@ -1,4 +1,4 @@
-// src/app/api/auth/[...nextauth]/route.ts
+// app/api/auth/[...nextauth]/route.ts
 
 import { Models } from "node-appwrite";
 import NextAuth, { NextAuthOptions, User as NextAuthUser } from "next-auth";

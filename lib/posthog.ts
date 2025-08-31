@@ -1,4 +1,5 @@
 // lib/posthog.ts
+
 import { PostHog } from "posthog-node";
 
 // This function creates a new PostHog client instance for server-side use.

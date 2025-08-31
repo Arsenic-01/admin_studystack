@@ -1,3 +1,5 @@
+// app/api/register/route.ts
+
 import { NextResponse } from "next/server";
 import { db, DATABASE_ID, USER_COLLECTION_ID } from "@/lib/appwrite";
 import { ID, Query } from "node-appwrite";

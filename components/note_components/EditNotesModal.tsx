@@ -1,3 +1,5 @@
+// components/note_components/EditNotesModal.tsx
+
 "use client";
 
 import { Button } from "@/components/ui/button";

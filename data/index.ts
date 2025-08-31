@@ -33,6 +33,14 @@ export const legalPopoverLinks = [
     title: "Cookie Policy",
     href: `${hostedAt}/cookie-policy`,
   },
+  {
+    title: "Copyright Policy",
+    href: `${hostedAt}/copyright-policy`,
+  },
+  {
+    title: "Terms & Conditions",
+    href: `${hostedAt}/terms-and-conditions`,
+  },
 ];
 
 export const footerIcons = [

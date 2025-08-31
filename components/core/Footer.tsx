@@ -68,7 +68,7 @@ const Footer = () => {
     <div>
       <div className="flex flex-col items-center justify-center gap-16 border-t border-neutral-300 dark:border-neutral-800 pt-16 pb-10">
         <div className="mx-auto flex w-full flex-col items-center justify-center gap-10 px-5 md:flex-row md:gap-20 lg:gap-32">
-          {/* Section 1: Logo (from original layout) */}
+          {/* Section 1: Logo */}
           <div className="flex items-center">
             <Link
               href={user ? "/home" : "/"}
@@ -78,7 +78,7 @@ const Footer = () => {
                 src="/title_logo.png"
                 alt="Study Stack Logo"
                 width={35}
-                height={35}
+                height={29}
                 className="select-none pointer-events-none invert dark:invert-0"
               />
               <span className="select-none text-lg font-medium text-neutral-900 dark:text-neutral-50">
@@ -87,7 +87,7 @@ const Footer = () => {
             </Link>
           </div>
 
-          {/* Section 2: Links (Updated with Popovers) */}
+          {/* Section 2: Links */}
           <div className="flex flex-wrap items-center justify-center gap-5 text-center">
             {mainFooterLinks.map((item) => (
               <Link

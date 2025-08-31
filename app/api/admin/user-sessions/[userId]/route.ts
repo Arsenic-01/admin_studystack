@@ -1,3 +1,5 @@
+// app/api/admin/user-sessions/[userId]/route.ts
+
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

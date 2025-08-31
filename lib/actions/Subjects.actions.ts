@@ -1,4 +1,5 @@
 // lib/actions/Subjects.actions.ts
+
 "use server";
 
 import { DATABASE_ID, db, Query, SUBJECT_COLLECTION_ID } from "../appwrite";
