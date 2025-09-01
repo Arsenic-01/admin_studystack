@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { toast } from "sonner";
-import {
-  AlreadyLoggedInCard,
-  AuthLoader,
-} from "./auth_helper_components/Helpers";
+import { AlreadyLoggedInCard } from "./auth_helper_components/Helpers";
 import { LoginForm } from "./auth_helper_components/LoginForm";
 
 export default function LoginPage() {
@@ -25,9 +22,9 @@ export default function LoginPage() {
     }
   }, [status, session, router]);
 
-  if (status === "loading") return <AuthLoader />;
+  if (status === "authenticated") {
+    return <AlreadyLoggedInCard />;
+  }
 
-  if (session?.user) return <AlreadyLoggedInCard />;
-
-  return <LoginForm />;
+  return <LoginForm isSessionLoading={status === "loading"} />;
 }

@@ -1,25 +1,28 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 import { toast } from "sonner";
-import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
-
 import { Input } from "@/components/ui/input";
-import { loginSchema } from "@/lib/validation_schema/validation";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { loginSchema } from "@/lib/validation_schema/validation";
 
-export function LoginForm() {
+// The component now accepts `isSessionLoading` to know when next-auth is checking the session.
+export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [prnNo, setPrnNo] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // This state is for the form submission process
   const [errors, setErrors] = useState<{ prnNo?: string; password?: string }>(
     {}
   );
+
+  // A single flag to disable the form during session checks OR form submission.
+  const isFormDisabled = loading || isSessionLoading;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,7 +50,7 @@ export function LoginForm() {
       });
 
       if (result?.error) {
-        toast.error(result.error);
+        toast.error("Invalid credentials. Please try again.");
         console.error("Sign-in failed:", result.error);
       } else if (result?.ok) {
         toast.success("Logged in successfully! 🎉");
@@ -86,9 +89,9 @@ export function LoginForm() {
             value={prnNo}
             required
             onChange={(e) => setPrnNo(e.target.value)}
-            className="mt-1 text-sm"
+            className="mt-1"
             placeholder="Enter your PRN number"
-            disabled={loading}
+            disabled={isFormDisabled} // Disable during session check or submission
           />
           {errors.prnNo && (
             <p className="text-red-500 font-semibold ml-1 text-sm mt-1">
@@ -97,7 +100,7 @@ export function LoginForm() {
           )}
         </div>
 
-        <div>
+        <div className="pb-3">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700 dark:text-white"
@@ -111,15 +114,15 @@ export function LoginForm() {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="pr-10 text-sm"
+              className="pr-10"
               placeholder="Enter your password"
-              disabled={loading}
+              disabled={isFormDisabled} // Disable during session check or submission
             />
             <button
               type="button"
               className="absolute inset-y-0 right-0 flex items-center pr-3 disabled:opacity-50"
               onClick={() => setShowPassword(!showPassword)}
-              disabled={loading}
+              disabled={isFormDisabled} // Disable during session check or submission
             >
               {showPassword ? (
                 <EyeOffIcon className="h-5 w-5 text-gray-400" />
@@ -135,7 +138,7 @@ export function LoginForm() {
           )}
           <div className="mt-3">
             <Link
-              href={"https://studystack01.vercel.app/forgot-password"}
+              href={"/forgot-password"}
               className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
               Forgot your password?
@@ -143,9 +146,17 @@ export function LoginForm() {
           </div>
         </div>
 
-        <RainbowButton className="w-full mt-3" type="submit" disabled={loading}>
-          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {loading ? "Signing In..." : "Sign In"}
+        <RainbowButton
+          className="w-full"
+          type="submit"
+          disabled={isFormDisabled}
+        >
+          {/* Dynamically change button text based on the current state */}
+          {loading
+            ? "Signing In..."
+            : isSessionLoading
+            ? "Please wait..."
+            : "Sign In"}
         </RainbowButton>
       </form>
     </div>
