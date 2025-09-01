@@ -10,6 +10,8 @@ import {
   getLinksFilterOptions,
   getAllUploaders,
   getSemesterOptions,
+  fetchRecentActivity,
+  fetchAdminDashboardStats,
 } from "@/lib/actions/AdminFetching.actions";
 import { deleteFormLink, editFormLink } from "@/lib/actions/Form.actions";
 import { deleteNote } from "@/lib/actions/Notes.actions";
@@ -298,6 +300,27 @@ export function useDeleteSubject() {
     onError: (error) => {
       console.error("Delete subject error:", error);
     },
+  });
+}
+
+// Recent Activity Hook
+
+export function useRecentActivity() {
+  return useQuery({
+    queryKey: ["recent-activity"],
+    queryFn: fetchRecentActivity,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+// Admin Dashboard Stats Hook
+
+export function useDashboardStats() {
+  return useQuery({
+    queryKey: ["dashboard-stats"],
+    queryFn: fetchAdminDashboardStats,
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: true,
   });
 }
 

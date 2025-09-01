@@ -98,23 +98,46 @@ export async function fetchAdminDashboardStats() {
 // RECENT ACTIVITY (NOW POWERED BY APPWRITE FUNCTION)
 // ============================================
 
-export async function fetchRecentActivity() {
+interface ActivityItem {
+  type: "note" | "user" | "youtube" | "form";
+  title: string;
+  user: string;
+  timestamp: string;
+}
+
+/**
+ * Fetches the most recent platform activities by executing a dedicated Appwrite Cloud Function.
+ * This is a Server Action and can be called directly from Server or Client Components.
+ * @returns A promise that resolves to an array of activity items.
+ */
+
+export async function fetchRecentActivity(): Promise<ActivityItem[]> {
   try {
-    // 1. Call the Appwrite Function to get the accurately sorted recent activities
+    // 1. Call the Appwrite Cloud Function using its ID from environment variables
     const response = await functions.createExecution(
       process.env.APPWRITE_ACTIVITY_FUNC_ID!
     );
 
+    // 2. Check if the function execution itself was successful (HTTP status 200)
     if (response.responseStatusCode !== 200) {
-      console.error("Appwrite function execution failed:", response);
-      throw new Error("Failed to execute recent activity function");
+      console.error("Appwrite function execution failed:", {
+        status: response.responseStatusCode,
+        body: response.responseBody,
+      });
+      throw new Error(
+        "Server-side execution of recent activity function failed."
+      );
     }
 
-    // 2. Parse the response and return it
-    return JSON.parse(response.responseBody);
+    // 3. Parse the JSON string from the function's response body and return it
+    // The Appwrite function is expected to return an array matching ActivityItem[]
+    const activities: ActivityItem[] = JSON.parse(response.responseBody);
+    return activities;
   } catch (error) {
-    console.error("Error fetching recent activity from function:", error);
-    return []; // Return empty array as a fallback
+    console.error("Error fetching recent activity:", error);
+
+    // Return an empty array as a safe fallback to prevent the UI from crashing
+    return [];
   }
 }
 

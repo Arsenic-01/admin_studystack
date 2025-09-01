@@ -1,10 +1,11 @@
-// components/admin_components/admin_revamp/UserRoleDistributionChart.tsx
 "use client";
 
 import * as React from "react";
-import { User, Users, Users2Icon } from "lucide-react";
+import { User, Users, AlertCircle } from "lucide-react";
 import { Label, Pie, PieChart, Sector } from "recharts";
 import { PieSectorDataItem } from "recharts/types/polar/Pie";
+
+import { useDashboardStats } from "@/hooks/useAdminData";
 import {
   Card,
   CardContent,
@@ -26,10 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-interface Props {
-  data: { students: number; teachers: number; admins: number };
-}
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Define the chart configuration with labels and colors for each role.
 const chartConfig = {
@@ -39,11 +37,17 @@ const chartConfig = {
   admins: { label: "Admins", color: "var(--chart-3)" },
 } satisfies ChartConfig;
 
-export function UserRoleDistributionChart({ data }: Props) {
+export function UserRoleDistributionChart() {
+  const { data: dashboardStats, isLoading, isError } = useDashboardStats();
+
+  // Use the 'userRoles' part of the fetched data
+  const data = dashboardStats?.userRoles;
+
   const id = "user-roles-interactive";
 
   // Transform the incoming data into the format needed by the chart
   const chartData = React.useMemo(() => {
+    if (!data) return [];
     return [
       { role: "students", count: data.students, fill: "var(--chart-1)" },
       { role: "teachers", count: data.teachers, fill: "var(--chart-2)" },
@@ -51,7 +55,14 @@ export function UserRoleDistributionChart({ data }: Props) {
     ].filter((item) => item.count > 0);
   }, [data]);
 
-  const [activeRole, setActiveRole] = React.useState(chartData[0]?.role || "");
+  const [activeRole, setActiveRole] = React.useState("");
+
+  // Effect to set the initial active role once data is loaded
+  React.useEffect(() => {
+    if (chartData.length > 0 && !activeRole) {
+      setActiveRole(chartData[0].role);
+    }
+  }, [chartData, activeRole]);
 
   const activeIndex = React.useMemo(
     () => chartData.findIndex((item) => item.role === activeRole),
@@ -66,14 +77,30 @@ export function UserRoleDistributionChart({ data }: Props) {
     [chartData]
   );
 
+  if (isLoading) {
+    return <ChartSkeleton />;
+  }
+
+  if (isError) {
+    return (
+      <Card className="flex flex-col h-full items-center justify-center">
+        <div className="text-center text-destructive p-4">
+          <AlertCircle className="mx-auto h-8 w-8" />
+          <p className="mt-2 font-semibold">Error loading chart data.</p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <Card data-chart={id} className="flex flex-col h-full">
+      {/* ... The rest of your component's return JSX remains exactly the same ... */}
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle className="flex items-center gap-2">
             <User className="size-5" />
-            User Role Distribution{" "}
+            User Role Distribution
           </CardTitle>
           <CardDescription>
             Total users on the platform: {totalUsers}
@@ -187,3 +214,18 @@ export function UserRoleDistributionChart({ data }: Props) {
     </Card>
   );
 }
+
+const ChartSkeleton = () => (
+  <Card className="flex flex-col h-full">
+    <CardHeader className="flex-row items-start space-y-0 pb-0">
+      <div className="grid gap-1">
+        <Skeleton className="h-6 w-48" />
+        <Skeleton className="h-4 w-64 mt-1" />
+      </div>
+      <Skeleton className="ml-auto h-7 w-[130px] rounded-lg" />
+    </CardHeader>
+    <CardContent className="flex flex-1 justify-center items-center pb-0">
+      <Skeleton className="h-[200px] w-[200px] rounded-full" />
+    </CardContent>
+  </Card>
+);

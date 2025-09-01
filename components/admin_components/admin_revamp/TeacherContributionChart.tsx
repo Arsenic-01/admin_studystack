@@ -141,7 +141,7 @@ export function TeacherContributionChart() {
         {data && chartData.length > 0 ? (
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[250px]"
+            className="mx-auto aspect-square max-h-[240px]"
           >
             <PieChart>
               <ChartTooltip
@@ -159,7 +159,7 @@ export function TeacherContributionChart() {
         ) : (
           !isLoading &&
           !error && (
-            <div className="flex h-[250px] items-center justify-center text-muted-foreground">
+            <div className="flex h-[240px] items-center justify-center text-muted-foreground">
               No contributions of this type.
             </div>
           )
