@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { loginSchema } from "@/lib/validation_schema/validation";
+import { hostedAt } from "@/data";
 
 // The component now accepts `isSessionLoading` to know when next-auth is checking the session.
 export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
@@ -138,7 +139,7 @@ export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
           )}
           <div className="mt-3">
             <Link
-              href={"/forgot-password"}
+              href={`${hostedAt}/forgot-password`}
               className="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
             >
               Forgot your password?
