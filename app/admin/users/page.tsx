@@ -408,7 +408,7 @@ export default function AdminUsersPage() {
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
-                                className="text-red-600 focus:text-red-600"
+                                className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                                 onClick={() =>
                                   setUserToDelete({
                                     id: user.id,
@@ -416,7 +416,8 @@ export default function AdminUsersPage() {
                                   })
                                 }
                               >
-                                <Trash2 className="mr-2 h-4 w-4" /> Delete User
+                                <Trash2 className="mr-2 h-4 w-4 text-red-600 dark:text-red-400" />
+                                Delete User
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

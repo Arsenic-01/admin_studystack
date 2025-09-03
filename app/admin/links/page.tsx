@@ -467,7 +467,7 @@ export default function AdminLinksPage() {
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
-                                className="text-red-600 focus:text-red-600"
+                                className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                                 onClick={() =>
                                   setLinkToDelete({
                                     id: link.id,
@@ -476,7 +476,8 @@ export default function AdminLinksPage() {
                                   })
                                 }
                               >
-                                <Trash2 className="mr-2 h-4 w-4" /> Delete Link
+                                <Trash2 className="mr-2 h-4 w-4 text-red-600 dark:text-red-400" />
+                                Delete Link
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

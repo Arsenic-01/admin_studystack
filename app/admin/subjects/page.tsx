@@ -258,9 +258,11 @@ export default function AdminSubjectsPage() {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
+                              className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                               onClick={() => setSubjectToDelete(subject)}
                             >
-                              <Trash2 className="mr-2 h-4 w-4" /> Delete
+                              <Trash2 className="mr-2 h-4 w-4 text-red-600 dark:text-red-400" />
+                              Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

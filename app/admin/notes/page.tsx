@@ -475,7 +475,7 @@ export default function AdminNotesPage() {
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                  className="text-red-600 focus:text-red-600"
+                                  className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                                   onClick={() =>
                                     setNoteToDelete({
                                       noteId: note.noteId,
@@ -484,8 +484,8 @@ export default function AdminNotesPage() {
                                     })
                                   }
                                 >
-                                  <Trash2 className="mr-2 h-4 w-4" /> Delete
-                                  Note
+                                  <Trash2 className="mr-2 h-4 w-4 text-red-600 dark:text-red-400" />
+                                  Delete Note
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>

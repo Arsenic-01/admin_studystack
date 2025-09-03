@@ -8,7 +8,6 @@ import {
   Headset,
   Home,
   Link as LinkIcon,
-  Settings2,
   Target,
   UserPlus,
   Users,
@@ -30,6 +29,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
 
 const navigationItems = [
   {
@@ -109,8 +109,14 @@ export function AdminSidebar({
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="flex items-center gap-2 py-1">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Settings2 className="size-4" />
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-neutral-100 border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 text-primary-foreground">
+            <Image
+              src={"/title_logo.png"}
+              alt="logo"
+              width={27}
+              height={22}
+              className="select-none pointer-events-none invert dark:invert-0"
+            />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">StudyStack Admin</span>
