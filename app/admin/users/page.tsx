@@ -1,11 +1,6 @@
 "use client";
 
 import {
-  UpdateUserData,
-  UpdateUserDialog,
-} from "@/components/admin_components/admin_helper_components/UpdateUserModal";
-import { UserLogsDialog } from "@/components/admin_components/admin_helper_components/UserLogDialog";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -58,7 +53,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useAdminUsers, useDeleteUser } from "@/hooks/useAdminData";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
   Edit,
@@ -73,6 +68,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import {
+  UpdateUserData,
+  UpdateUserDialog,
+} from "./_components/UpdateUserModal";
+import { UserLogsDialog } from "./_components/UserLogDialog";
 
 // Helper to get initials for the avatar
 const getInitials = (name: string) => {
@@ -83,10 +83,9 @@ const getInitials = (name: string) => {
     : name.substring(0, 2).toUpperCase();
 };
 
-// New hook for bulk deleting users
 const useDeleteMultipleUsers = () => {
   const queryClient = useQueryClient();
-  const deleteUserMutation = useDeleteUser(); // Reuse the single delete mutation
+  const deleteUserMutation = useDeleteUser();
 
   return useMutation({
     mutationFn: async (userIds: string[]) => {
@@ -116,7 +115,6 @@ export default function AdminUsersPage() {
   } | null>(null);
   const [selectedUsers, setSelectedUsers] = useState(new Set<string>());
   const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
-
   const queryClient = useQueryClient();
   const debouncedSearch = useDebounce(search, 300);
   const router = useRouter();
@@ -148,6 +146,8 @@ export default function AdminUsersPage() {
     deleteUserMutation.mutate(userToDelete.id, {
       onSuccess: () => {
         toast.success(`User "${userToDelete.name}" has been deleted.`);
+        queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+
         setUserToDelete(null);
       },
       onError: (err) => {

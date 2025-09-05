@@ -4,7 +4,6 @@
 
 import { DATABASE_ID, db, FORM_COLLECTION_ID } from "../appwrite";
 
-// Edit Google Form link
 export async function editFormLink({
   id,
   googleFormLink,
@@ -29,7 +28,6 @@ export async function editFormLink({
   }
 }
 
-// Delete Google Form link
 export async function deleteFormLink({ id }: { id: string }) {
   try {
     await db.deleteDocument(DATABASE_ID!, FORM_COLLECTION_ID!, id);

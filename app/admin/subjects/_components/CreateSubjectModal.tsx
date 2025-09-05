@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Subject } from "@/lib/appwrite_types";
-import { subjectSchema } from "@/lib/validation_schema/validation";
+import { subjectSchema } from "@/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import { ID } from "node-appwrite";

@@ -25,8 +25,13 @@ import { Edit, Loader2 } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { editNoteSchema } from "@/lib/validation_schema/validation";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { editNoteSchema } from "@/validation";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export interface EditNotesModalProps {
   open: boolean;

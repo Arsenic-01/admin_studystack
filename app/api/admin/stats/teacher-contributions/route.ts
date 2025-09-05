@@ -1,6 +1,6 @@
 // app/api/admin/stats/teacher-contributions/route.ts
 
-import { fetchTeacherContributions } from "@/lib/actions/AdminFetching.actions";
+import { fetchTeacherContributions } from "@/lib/actions/Admin.actions";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

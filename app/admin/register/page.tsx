@@ -12,8 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { importUsersFromCsv } from "@/lib/actions/Admin.actions";
-import { signUpFormSchema } from "@/lib/validation_schema/validation";
+import { importUsersFromCsv } from "@/lib/actions/User.actions";
+import { signUpFormSchema } from "@/validation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangle,
   Eye,
@@ -32,6 +33,7 @@ import { toast } from "sonner";
 
 function CsvUserImporter() {
   const [isPending, startTransition] = useTransition();
+  const queryClient = useQueryClient();
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -47,6 +49,7 @@ function CsvUserImporter() {
           toast.success("Import Complete!", {
             description: `${response.createdCount} new users have been successfully created.`,
           });
+          queryClient.invalidateQueries({ queryKey: ["admin-users"] });
         } else {
           toast.error("Import Failed", {
             description: response.error || "An unknown error occurred.",
@@ -134,7 +137,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const queryClient = useQueryClient();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(""); // Clear error on change
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -171,6 +174,7 @@ export default function RegisterPage() {
         description: "The new user account has been created.",
       });
       setForm({ prnNo: "", name: "", email: "", password: "", role: "" });
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unexpected error occurred"

@@ -1,8 +1,6 @@
 "use client";
 
-import EditNotesModal, {
-  EditNoteSchema,
-} from "@/components/note_components/EditNotesModal";
+import EditNotesModal, { EditNoteSchema } from "./_components/EditNotesModal";
 import {
   AlertDialog,
   AlertDialogAction,

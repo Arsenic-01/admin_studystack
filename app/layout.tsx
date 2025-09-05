@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { Providers } from "./providers";
-import ReactQueryProvider from "./QueryProvider";
-import ConditionalHeader from "@/components/core/ConditionalHeader";
-import ConditionalFooter from "@/components/core/ConditionalFooter";
+import { Providers } from "../providers";
+import ReactQueryProvider from "../providers/QueryProvider";
+import ConditionalHeader from "@/components/core/layout/ConditionalHeader";
+import ConditionalFooter from "@/components/core/layout/ConditionalFooter";
 
 // const inter = Inter({ subsets: ["latin"] });
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -41,7 +41,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <ConditionalHeader />
             {children}
-            <Toaster richColors />
+            <Toaster />
             <ConditionalFooter />
           </ReactQueryProvider>
         </Providers>

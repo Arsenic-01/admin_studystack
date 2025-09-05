@@ -5,7 +5,7 @@ export const hostedAt = "https://studystack01.vercel.app";
 export const mainFooterLinks = [
   {
     title: "MSBTE",
-    href: "https://msbte.org.in/",
+    href: "https://msbte.ac.in/",
   },
   {
     title: "Contact",

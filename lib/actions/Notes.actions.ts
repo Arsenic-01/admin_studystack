@@ -5,26 +5,6 @@
 import { DATABASE_ID, db, NOTE_COLLECTION_ID } from "../appwrite";
 import { getDriveClient } from "../googleDrive";
 
-interface DeleteNoteParams {
-  noteId: string;
-  fileId: string;
-}
-
-export async function deleteNote({ noteId, fileId }: DeleteNoteParams) {
-  try {
-    const drive = await getDriveClient();
-    await db.deleteDocument(DATABASE_ID!, NOTE_COLLECTION_ID!, noteId);
-    await drive.files.delete({
-      fileId: fileId,
-    });
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error deleting note:", error);
-    return { success: false, error: "Failed to delete note." };
-  }
-}
-
 export interface EditNotesModalFunctionProps {
   noteId: string;
   title: string;
@@ -46,3 +26,23 @@ export const editNotes = async (data: EditNotesModalFunctionProps) => {
     return { success: false, error: "Failed to update note." };
   }
 };
+
+interface DeleteNoteParams {
+  noteId: string;
+  fileId: string;
+}
+
+export async function deleteNote({ noteId, fileId }: DeleteNoteParams) {
+  try {
+    const drive = await getDriveClient();
+    await db.deleteDocument(DATABASE_ID!, NOTE_COLLECTION_ID!, noteId);
+    await drive.files.delete({
+      fileId: fileId,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    return { success: false, error: "Failed to delete note." };
+  }
+}

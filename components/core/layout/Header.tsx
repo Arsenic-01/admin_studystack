@@ -8,7 +8,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { ThemeToggle } from "./navbar_helper_components/ThemeSwitcher";
+import { ThemeToggle } from "../ThemeSwitcher";
 
 import {
   NavigationMenu,
@@ -23,10 +23,9 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { cn } from "@/lib/utils";
 import { hostedAt } from "@/data";
 
-const ProfileCard = dynamic(
-  () => import("./navbar_helper_components/ProfileCard"),
-  { ssr: false }
-);
+const ProfileCard = dynamic(() => import("@/components/core/ProfileCard"), {
+  ssr: false,
+});
 
 const aboutLinks: { title: string; href: string; description: string }[] = [
   {

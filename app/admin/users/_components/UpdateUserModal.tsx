@@ -21,7 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { updateUser } from "@/lib/actions/Admin.actions";
+import { updateUser } from "@/lib/actions/User.actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 // 1. Define the Zod schema for validation
 const updateUserSchema = z.object({
@@ -60,6 +61,7 @@ export function UpdateUserDialog({
   onClose,
   onUpdate,
 }: UpdateUserDialogProps) {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState<Omit<UpdateUserData, "password">>({
     id: user.id,
     prnNo: user.prnNo,
@@ -68,7 +70,6 @@ export function UpdateUserDialog({
     name: user.name,
   });
   const [newPassword, setNewPassword] = useState("");
-  // 2. Add state to hold validation errors
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -103,6 +104,8 @@ export function UpdateUserDialog({
       updateUser(validationResult.data).then((result) => {
         if (result.success) {
           toast.success("User updated successfully!");
+          queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+
           onUpdate();
         } else {
           toast.error(result.error || "Failed to update user.");

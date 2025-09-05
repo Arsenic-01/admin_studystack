@@ -90,7 +90,7 @@ export function DashboardStatCards() {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {statCards.map((card) => (
         <Link href={card.href} key={card.title}>
-          <Card className="hover:bg-muted/50 transition-colors">
+          <Card className="hover:bg-muted/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {card.title}
@@ -109,16 +109,38 @@ export function DashboardStatCards() {
   );
 }
 
-// A dedicated skeleton component for the stat cards
+const skeletonCardsData = [
+  {
+    title: "Total Users",
+    icon: Users,
+  },
+  {
+    title: "Total Notes",
+    icon: FileText,
+  },
+  {
+    title: "Total Links",
+    icon: LinkIcon,
+  },
+  {
+    title: "Total Subjects",
+    icon: BookOpen,
+  },
+];
+
 const StatCardsSkeleton = () => (
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-    {[...Array(4)].map((_, i) => (
-      <Card key={i}>
+    {skeletonCardsData.map((card) => (
+      <Card key={card.title}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-4 w-4" />
+          <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+          <card.icon className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
+          {/* Skeleton for the count. 
+            - h-8 approximates the height of the 'text-2xl' font.
+            - w-12 provides a standard width for a number.
+          */}
           <Skeleton className="h-8 w-12" />
         </CardContent>
       </Card>

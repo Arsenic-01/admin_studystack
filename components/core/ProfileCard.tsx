@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useUser } from "@/hooks/useUser";
-import { ChangePasswordDialog } from "../../auth/auth_helper_components/ChangePasswordDialog";
+import { ChangePasswordDialog } from "./auth/ChangePasswordDialog";
+import { SessionUser } from "@/lib/appwrite_types";
 
 const getInitials = (name: string) => {
   return name
@@ -29,8 +30,13 @@ const capitalize = (s: string) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-export default function UserProfilePopover() {
-  const { user } = useUser();
+export default function UserProfilePopover({
+  serverUser,
+}: {
+  serverUser?: SessionUser | null;
+}) {
+  const { user: clientUser } = useUser();
+  const user = serverUser ?? clientUser;
   if (!user) {
     return null;
   }

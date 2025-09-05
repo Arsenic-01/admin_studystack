@@ -1,7 +1,7 @@
 // hooks/useAdminData.ts
 "use client";
 
-import { deleteUser } from "@/lib/actions/Admin.actions";
+import { deleteUser } from "@/lib/actions/User.actions";
 import {
   fetchPaginatedLinksForAdmin,
   fetchPaginatedNotesForAdmin,
@@ -12,7 +12,7 @@ import {
   getSemesterOptions,
   fetchRecentActivity,
   fetchAdminDashboardStats,
-} from "@/lib/actions/AdminFetching.actions";
+} from "@/lib/actions/Admin.actions";
 import { deleteFormLink, editFormLink } from "@/lib/actions/Form.actions";
 import { deleteNote } from "@/lib/actions/Notes.actions";
 import { triggerRevalidation } from "@/lib/actions/revalidate";

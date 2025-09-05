@@ -94,7 +94,6 @@ export function UserRoleDistributionChart() {
 
   return (
     <Card data-chart={id} className="flex flex-col h-full">
-      {/* ... The rest of your component's return JSX remains exactly the same ... */}
       <ChartStyle id={id} config={chartConfig} />
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
@@ -219,13 +218,22 @@ const ChartSkeleton = () => (
   <Card className="flex flex-col h-full">
     <CardHeader className="flex-row items-start space-y-0 pb-0">
       <div className="grid gap-1">
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-4 w-64 mt-1" />
+        <CardTitle className="flex items-center gap-2">
+          <User className="size-5" />
+          User Role Distribution
+        </CardTitle>
+        <CardDescription>
+          Total users on the platform:{" "}
+          <Skeleton className="h-4 w-12 inline-block align-middle" />
+        </CardDescription>
       </div>
       <Skeleton className="ml-auto h-7 w-[130px] rounded-lg" />
     </CardHeader>
     <CardContent className="flex flex-1 justify-center items-center pb-0">
-      <Skeleton className="h-[200px] w-[200px] rounded-full" />
+      <div className="relative h-[250px] w-[250px]">
+        <Skeleton className="h-full w-full rounded-full" />
+        <div className="absolute inset-[65px] bg-card rounded-full" />
+      </div>
     </CardContent>
   </Card>
 );

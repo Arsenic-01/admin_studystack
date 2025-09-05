@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  EditLinkModal,
-  LinkForEdit,
-} from "@/components/link_components/EditLinkModal";
+import { EditLinkModal, LinkForEdit } from "./_components/EditLinkModal";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -77,11 +74,9 @@ import { FaYoutube } from "react-icons/fa6";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-// NOTE: A new hook to handle multiple deletions.
-// You would replace this with your actual API call logic.
 const useDeleteMultipleLinks = () => {
   const queryClient = useQueryClient();
-  const deleteLinkMutation = useDeleteLink(); // Reuse the single delete mutation
+  const deleteLinkMutation = useDeleteLink();
 
   return useMutation({
     mutationFn: async (links: { id: string; type: "youtube" | "form" }[]) => {
@@ -99,7 +94,6 @@ const useDeleteMultipleLinks = () => {
   });
 };
 
-// Static list of all possible link types for the filter
 const allLinkTypes = ["youtube", "form"];
 
 export default function AdminLinksPage() {

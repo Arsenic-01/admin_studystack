@@ -8,7 +8,7 @@ import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { loginSchema } from "@/lib/validation_schema/validation";
+import { loginSchema } from "@/validation";
 import { hostedAt } from "@/data";
 
 // The component now accepts `isSessionLoading` to know when next-auth is checking the session.

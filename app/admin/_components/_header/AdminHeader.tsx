@@ -1,12 +1,13 @@
-"use client";
-
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { ThemeToggle } from "@/components/core/navbar/navbar_helper_components/ThemeSwitcher";
-import ProfileCard from "@/components/core/navbar/navbar_helper_components/ProfileCard";
 import { DynamicBreadcrumb } from "./DynamicBreadcrumb";
+import { ThemeToggle } from "@/components/core/ThemeSwitcher";
+import ProfileCard from "@/components/core/ProfileCard";
+import { getCurrentUser } from "@/lib/auth";
 
-export function AdminHeader() {
+export async function AdminHeader() {
+  const user = await getCurrentUser();
+
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-neutral-200 dark:border-neutral-800 px-4 sticky top-0 z-10 bg-background">
       <div className="flex items-center gap-2">
@@ -14,11 +15,9 @@ export function AdminHeader() {
         <Separator orientation="vertical" className="mr-2 h-4" />
         <DynamicBreadcrumb />
       </div>
-
-      {/* Right side - Theme toggle and Profile */}
       <div className="flex items-center gap-2">
         <ThemeToggle />
-        <ProfileCard />
+        <ProfileCard serverUser={user} />
       </div>
     </header>
   );

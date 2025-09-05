@@ -26,7 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { TeacherContributionDetail } from "@/lib/actions/AdminFetching.actions";
+import { TeacherContributionDetail } from "@/lib/actions/Admin.actions";
 
 type ContributionType = keyof Omit<TeacherContributionDetail, "name">;
 

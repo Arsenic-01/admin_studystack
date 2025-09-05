@@ -4,8 +4,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { AlreadyLoggedInCard } from "./auth_helper_components/Helpers";
-import { LoginForm } from "./auth_helper_components/LoginForm";
+import { AlreadyLoggedInCard } from "./AlreadyLoggedInCard";
+import { LoginForm } from "./LoginForm";
 
 export default function LoginPage() {
   const router = useRouter();

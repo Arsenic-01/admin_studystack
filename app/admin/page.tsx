@@ -1,13 +1,13 @@
 // app/admin/page.tsx
 
-import { DailyActiveUsersChart } from "@/components/admin_components/admin_revamp/DailyActiveUsersChart";
-import { DashboardStatCards } from "@/components/admin_components/admin_revamp/DashboardStatCards";
-import { DeviceUsersChart } from "@/components/admin_components/admin_revamp/DeviceUsersChart";
-import { RecentActivityFeed } from "@/components/admin_components/admin_revamp/RecentActivityFeed";
-import { TeacherContributionChart } from "@/components/admin_components/admin_revamp/TeacherContributionChart";
-import { TopContentList } from "@/components/admin_components/admin_revamp/TopContentList";
-import { TopUsersList } from "@/components/admin_components/admin_revamp/TopUsersList"; // <-- Import the new component
-import { UserRoleDistributionChart } from "@/components/admin_components/admin_revamp/UserRoleDistributionChart";
+import { DailyActiveUsersChart } from "./_components/DailyActiveUsersChart";
+import { DashboardStatCards } from "./_components/DashboardStatCards";
+import { DeviceUsersChart } from "./_components/DeviceUsersChart";
+import { RecentActivityFeed } from "./_components/RecentActivityFeed";
+import { TeacherContributionChart } from "./_components/TeacherContributionChart";
+import { TopContentList } from "./_components/TopContentList";
+import { TopUsersList } from "./_components/TopUsersList";
+import { UserRoleDistributionChart } from "./_components/UserRoleDistributionChart";
 
 export default async function AdminOverviewPage() {
   return (

@@ -26,7 +26,7 @@ import { useState, useTransition } from "react";
 import { FieldArrayPath, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { editSubjectSchema } from "@/lib/validation_schema/validation";
+import { editSubjectSchema } from "@/validation";
 
 interface EditSubjectModalProps {
   open: boolean;
