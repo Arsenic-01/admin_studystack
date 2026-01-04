@@ -87,6 +87,7 @@ const EditSubjectModal = ({
         unit: data.units,
       };
       onSubjectUpdate(subjectData);
+      form.reset();
     });
   };
 

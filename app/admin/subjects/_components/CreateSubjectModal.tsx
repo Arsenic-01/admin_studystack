@@ -79,6 +79,7 @@ const CreateSubjectModal = ({
         unit: data.units,
       };
       onSubjectCreate(subjectData);
+      form.reset();
     });
   };
 
