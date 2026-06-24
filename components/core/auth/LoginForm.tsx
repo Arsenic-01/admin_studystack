@@ -19,7 +19,7 @@ export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); // This state is for the form submission process
   const [errors, setErrors] = useState<{ prnNo?: string; password?: string }>(
-    {}
+    {},
   );
 
   // A single flag to disable the form during session checks OR form submission.
@@ -51,12 +51,10 @@ export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
       });
 
       if (result?.error) {
-        toast.error("Invalid credentials. Please try again.");
-        console.error("Sign-in failed:", result.error);
+        toast.error(result?.error);
       } else if (result?.ok) {
         toast.success("Logged in successfully! 🎉");
-        router.refresh(); // Important to refresh server components and session
-        // Let the main page component handle the redirect after session updates
+        router.refresh();
       }
     } catch (error) {
       toast.error("An unexpected error occurred. Please try again.");
@@ -156,8 +154,8 @@ export function LoginForm({ isSessionLoading }: { isSessionLoading: boolean }) {
           {loading
             ? "Signing In..."
             : isSessionLoading
-            ? "Please wait..."
-            : "Sign In"}
+              ? "Please wait..."
+              : "Sign In"}
         </RainbowButton>
       </form>
     </div>

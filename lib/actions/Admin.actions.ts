@@ -115,7 +115,7 @@ export async function fetchRecentActivity(): Promise<ActivityItem[]> {
   try {
     // 1. Call the Appwrite Cloud Function using its ID from environment variables
     const response = await functions.createExecution(
-      process.env.APPWRITE_ACTIVITY_FUNC_ID!
+      process.env.APPWRITE_ACTIVITY_FUNC_ID!,
     );
 
     // 2. Check if the function execution itself was successful (HTTP status 200)
@@ -125,7 +125,7 @@ export async function fetchRecentActivity(): Promise<ActivityItem[]> {
         body: response.responseBody,
       });
       throw new Error(
-        "Server-side execution of recent activity function failed."
+        "Server-side execution of recent activity function failed.",
       );
     }
 
@@ -168,7 +168,7 @@ export async function fetchPaginatedUsers({
     const response = await db.listDocuments(
       DATABASE_ID!,
       USER_COLLECTION_ID!,
-      queries
+      queries,
     );
     return {
       documents: response.documents.map((doc) => ({
@@ -177,6 +177,7 @@ export async function fetchPaginatedUsers({
         name: doc.name,
         role: doc.role as "admin" | "student" | "teacher",
         email: doc.email,
+        ban: doc.ban || false,
         createdAt: doc.$createdAt,
       })),
       total: response.total,
@@ -215,7 +216,7 @@ export async function fetchPaginatedNotesForAdmin({
     const response = await db.listDocuments(
       DATABASE_ID!,
       NOTE_COLLECTION_ID!,
-      queries
+      queries,
     );
     return {
       documents: response.documents.map((doc) => ({
@@ -254,7 +255,7 @@ async function getUploaderOptions(): Promise<UploaderCache> {
     const document = await db.getDocument(
       DATABASE_ID!,
       CACHE_COLLECTION_ID!,
-      UPLOADERS_CACHE_DOCUMENT_ID!
+      UPLOADERS_CACHE_DOCUMENT_ID!,
     );
 
     // The data is stored as a string, so we need to parse it
@@ -320,7 +321,7 @@ export async function fetchPaginatedLinksForAdmin({
       const youtubeResponse = await db.listDocuments(
         DATABASE_ID!,
         YOUTUBE_COLLECTION_ID!,
-        buildQueries(limit, offset)
+        buildQueries(limit, offset),
       );
       allLinks.push(
         ...youtubeResponse.documents.map((doc) => ({
@@ -332,7 +333,7 @@ export async function fetchPaginatedLinksForAdmin({
           semester: doc.semester,
           createdAt: doc.$createdAt,
           type: "youtube" as const,
-        }))
+        })),
       );
       totalCount += youtubeResponse.total;
     }
@@ -341,7 +342,7 @@ export async function fetchPaginatedLinksForAdmin({
       const formResponse = await db.listDocuments(
         DATABASE_ID!,
         FORM_COLLECTION_ID!,
-        buildQueries(limit, offset)
+        buildQueries(limit, offset),
       );
       allLinks.push(
         ...formResponse.documents.map((doc) => ({
@@ -354,14 +355,14 @@ export async function fetchPaginatedLinksForAdmin({
           createdAt: doc.$createdAt,
           type: "form" as const,
           formType: doc.formType,
-        }))
+        })),
       );
       totalCount += formResponse.total;
     }
 
     allLinks.sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
     if (typeFilter === "all") allLinks = allLinks.slice(offset, offset + limit);
     return { documents: allLinks, total: totalCount };
@@ -377,7 +378,7 @@ export async function getLinksFilterOptions() {
     const cacheDocument = await db.getDocument(
       DATABASE_ID!,
       CACHE_COLLECTION_ID!,
-      LINKS_UPLOADERS_CACHE_ID!
+      LINKS_UPLOADERS_CACHE_ID!,
     );
 
     // 2. Parse the JSON data stored in the 'data' attribute.
@@ -421,7 +422,7 @@ export async function fetchPaginatedSubjects({
     const response = await db.listDocuments(
       DATABASE_ID!,
       SUBJECT_COLLECTION_ID!,
-      queries
+      queries,
     );
     return {
       documents: response.documents.map((doc) => ({
@@ -457,7 +458,7 @@ export async function fetchTeacherContributions(): Promise<
     const statsDoc = await db.getDocument(
       DATABASE_ID!,
       CACHE_COLLECTION_ID!,
-      STATS_DOCUMENT_ID!
+      STATS_DOCUMENT_ID!,
     );
 
     // 2. The data is stored as a JSON string, so we need to parse it
@@ -465,7 +466,7 @@ export async function fetchTeacherContributions(): Promise<
   } catch (error) {
     console.error(
       "Failed to fetch pre-calculated teacher contributions:",
-      error
+      error,
     );
     // Return empty array as a fallback if the stats haven't been generated yet
     return [];

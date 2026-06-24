@@ -51,11 +51,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAdminUsers, useDeleteUser } from "@/hooks/useAdminData";
+import {
+  useAdminUsers,
+  useDeleteUser,
+  useToggleUserBan,
+} from "@/hooks/useAdminData";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
+  Ban,
   Edit,
   FileText,
   MoreHorizontal,
@@ -91,7 +96,7 @@ const useDeleteMultipleUsers = () => {
     mutationFn: async (userIds: string[]) => {
       // Run all delete operations in parallel
       await Promise.all(
-        userIds.map((id) => deleteUserMutation.mutateAsync(id))
+        userIds.map((id) => deleteUserMutation.mutateAsync(id)),
       );
     },
     onSuccess: () => {
@@ -108,6 +113,14 @@ export default function AdminUsersPage() {
     id: string;
     name: string;
   } | null>(null);
+
+  // State for toggling ban
+  const [userToToggleBan, setUserToToggleBan] = useState<{
+    id: string;
+    name: string;
+    ban: boolean;
+  } | null>(null);
+
   const [userToEdit, setUserToEdit] = useState<UpdateUserData | null>(null);
   const [userToViewLogs, setUserToViewLogs] = useState<{
     id: string;
@@ -115,6 +128,7 @@ export default function AdminUsersPage() {
   } | null>(null);
   const [selectedUsers, setSelectedUsers] = useState(new Set<string>());
   const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
+
   const queryClient = useQueryClient();
   const debouncedSearch = useDebounce(search, 300);
   const router = useRouter();
@@ -134,10 +148,11 @@ export default function AdminUsersPage() {
 
   const deleteUserMutation = useDeleteUser();
   const deleteMultipleUsersMutation = useDeleteMultipleUsers();
+  const toggleUserBanMutation = useToggleUserBan();
 
   const allUsers = useMemo(
     () => data?.pages.flatMap((page) => page.documents) ?? [],
-    [data]
+    [data],
   );
   const totalCount = data?.pages[0]?.total ?? 0;
 
@@ -147,7 +162,6 @@ export default function AdminUsersPage() {
       onSuccess: () => {
         toast.success(`User "${userToDelete.name}" has been deleted.`);
         queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-
         setUserToDelete(null);
       },
       onError: (err) => {
@@ -171,6 +185,29 @@ export default function AdminUsersPage() {
         toast.error("Failed to delete some or all selected users.");
       },
     });
+  };
+
+  const handleToggleBan = () => {
+    if (!userToToggleBan) return;
+
+    // Pass the opposite of their current ban status
+    const newBanStatus = !userToToggleBan.ban;
+
+    toggleUserBanMutation.mutate(
+      { userId: userToToggleBan.id, ban: newBanStatus },
+      {
+        onSuccess: () => {
+          toast.success(
+            `User "${userToToggleBan.name}" has been ${newBanStatus ? "blocked" : "unblocked"}.`,
+          );
+          setUserToToggleBan(null);
+        },
+        onError: (err) => {
+          toast.error("Failed to update user status.");
+          console.error("Toggle ban error:", err);
+        },
+      },
+    );
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -284,9 +321,9 @@ export default function AdminUsersPage() {
                           numSelected > 0 && numSelected < allUsers.length
                             ? "indeterminate"
                             : numSelected === allUsers.length &&
-                              allUsers.length > 0
-                            ? "checked"
-                            : "unchecked"
+                                allUsers.length > 0
+                              ? "checked"
+                              : "unchecked"
                         }
                       />
                     </TableHead>
@@ -346,7 +383,17 @@ export default function AdminUsersPage() {
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="font-semibold">{user.name}</p>
+                              <p className="font-semibold flex items-center gap-2">
+                                {user.name}
+                                {user.ban && (
+                                  <Badge
+                                    variant="destructive"
+                                    className="h-5 px-1.5 text-[10px]"
+                                  >
+                                    Banned
+                                  </Badge>
+                                )}
+                              </p>
                               <p className="text-xs text-muted-foreground">
                                 {user.email}
                               </p>
@@ -374,7 +421,7 @@ export default function AdminUsersPage() {
                               <span>
                                 {format(
                                   new Date(user.createdAt),
-                                  "MMM dd, yyyy"
+                                  "MMM dd, yyyy",
                                 )}
                               </span>
                             </TooltipTrigger>
@@ -407,6 +454,21 @@ export default function AdminUsersPage() {
                                 <Edit className="mr-2 h-4 w-4" /> Edit User
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
+
+                              {/* Dynamic Block / Unblock Toggle */}
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  setUserToToggleBan({
+                                    id: user.id,
+                                    name: user.name,
+                                    ban: user.ban,
+                                  })
+                                }
+                              >
+                                <Ban className="mr-2 h-4 w-4" />
+                                {user.ban ? "Unblock User" : "Block User"}
+                              </DropdownMenuItem>
+
                               <DropdownMenuItem
                                 className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400"
                                 onClick={() =>
@@ -416,7 +478,7 @@ export default function AdminUsersPage() {
                                   })
                                 }
                               >
-                                <Trash2 className="mr-2 h-4 w-4 text-red-600 dark:text-red-400" />
+                                <Trash2 className="mr-2 h-4 w-4" />
                                 Delete User
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -456,6 +518,8 @@ export default function AdminUsersPage() {
         open={!!userToViewLogs}
         onClose={() => setUserToViewLogs(null)}
       />
+
+      {/* Delete User Dialog */}
       <AlertDialog
         open={!!userToDelete}
         onOpenChange={() => setUserToDelete(null)}
@@ -481,6 +545,7 @@ export default function AdminUsersPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Bulk Delete Dialog */}
       <AlertDialog
         open={isBulkDeleteConfirmOpen}
         onOpenChange={setIsBulkDeleteConfirmOpen}
@@ -503,6 +568,41 @@ export default function AdminUsersPage() {
               {deleteMultipleUsersMutation.isPending
                 ? "Deleting..."
                 : "Delete All"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Block / Unblock User Dialog */}
+      <AlertDialog
+        open={!!userToToggleBan}
+        onOpenChange={() => setUserToToggleBan(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {userToToggleBan?.ban ? "Unblock User" : "Block User"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to{" "}
+              {userToToggleBan?.ban ? "unblock" : "block"}{" "}
+              <strong>{userToToggleBan?.name}</strong>?
+              {userToToggleBan?.ban
+                ? " They will regain access to the platform."
+                : " They will be immediately logged out and lose access to the platform."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleToggleBan}
+              disabled={toggleUserBanMutation.isPending}
+            >
+              {toggleUserBanMutation.isPending
+                ? "Updating..."
+                : userToToggleBan?.ban
+                  ? "Unblock"
+                  : "Block"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

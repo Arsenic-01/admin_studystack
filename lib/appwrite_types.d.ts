@@ -18,6 +18,7 @@ export interface SessionUser {
   prnNo: string;
   name: string;
   email?: string | null;
+  ban: boolean;
 }
 
 export interface updateUserData {
@@ -28,6 +29,7 @@ export interface updateUserData {
   role: "admin" | "student" | "teacher";
   teacherSem?: number;
   password?: string;
+  ban?: boolean;
 }
 
 export type Note = {

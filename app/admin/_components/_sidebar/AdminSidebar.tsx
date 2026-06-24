@@ -115,7 +115,7 @@ export function AdminSidebar({
               alt="logo"
               width={27}
               height={22}
-              className="select-none pointer-events-none invert dark:invert-0"
+              className="select-none pointer-events-none invert dark:invert-0 size-auto"
             />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">

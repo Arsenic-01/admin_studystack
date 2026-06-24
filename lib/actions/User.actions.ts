@@ -21,6 +21,7 @@ export async function fetchUsers() {
       role: doc.role as "admin" | "student" | "teacher",
       email: doc.email,
       password: doc.password,
+      ban: doc.ban || false, // Ensure ban status is returned
     }));
   } catch (error) {
     console.log("Error fetching users:", error);
@@ -42,7 +43,7 @@ export async function updateUser(data: updateUserData) {
       DATABASE_ID!,
       USER_COLLECTION_ID!,
       userId,
-      dataToUpdate
+      dataToUpdate,
     );
 
     return { success: true };
@@ -63,12 +64,26 @@ export async function deleteUser(userId: string) {
   }
 }
 
+// ✨ NEW: Toggle user ban status
+export async function toggleUserBan(userId: string, banStatus: boolean) {
+  try {
+    await db.updateDocument(DATABASE_ID!, USER_COLLECTION_ID!, userId, {
+      ban: banStatus,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating user ban status:", error);
+    return { success: false, error: (error as Error).message };
+  }
+}
+
 const CsvUserSchema = signUpFormSchema.omit({ password: true }).extend({
   password: z.string().min(1, "Password is required"), // Password is required in CSV
 });
 
 export async function importUsersFromCsv(
-  csvContent: string
+  csvContent: string,
 ): Promise<{ success: boolean; error?: string; createdCount?: number }> {
   try {
     // Split content into lines and remove header
@@ -88,7 +103,7 @@ export async function importUsersFromCsv(
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i].split(",");
       const [prnNo, name, email, password, role] = row.map((cell) =>
-        cell.trim()
+        cell.trim(),
       );
 
       const userData = { prnNo, name, email, password, role };
@@ -98,7 +113,7 @@ export async function importUsersFromCsv(
         validationErrors.push(
           `Row ${i + 2}: ${validation.error.issues
             .map((e) => e.message)
-            .join(", ")}`
+            .join(", ")}`,
         );
         continue; // Skip invalid rows
       }
@@ -111,7 +126,7 @@ export async function importUsersFromCsv(
         error: `Validation failed for ${
           validationErrors.length
         } rows. Please fix them and re-upload. Errors: ${validationErrors.join(
-          "; "
+          "; ",
         )}`,
       };
     }
@@ -127,7 +142,7 @@ export async function importUsersFromCsv(
             Query.equal("prnNo", user.prnNo),
             Query.equal("email", user.email),
           ]),
-        ]
+        ],
       );
 
       if (existingUser.total > 0) {
@@ -144,11 +159,12 @@ export async function importUsersFromCsv(
         email: user.email,
         password: hashedPassword,
         role: user.role,
+        ban: false, // Explicitly set new users to not banned
       };
     });
 
     const documentsToCreate = (await Promise.all(creationPromises)).filter(
-      Boolean
+      Boolean,
     );
 
     if (documentsToCreate.length === 0) {
@@ -162,8 +178,8 @@ export async function importUsersFromCsv(
     // 3. Batch create documents (Appwrite doesn't have a batch create, so we loop)
     const creationResults = await Promise.all(
       documentsToCreate.map((doc) =>
-        db.createDocument(DATABASE_ID!, USER_COLLECTION_ID!, ID.unique(), doc!)
-      )
+        db.createDocument(DATABASE_ID!, USER_COLLECTION_ID!, ID.unique(), doc!),
+      ),
     );
 
     return { success: true, createdCount: creationResults.length };

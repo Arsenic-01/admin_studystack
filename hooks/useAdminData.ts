@@ -1,7 +1,7 @@
 // hooks/useAdminData.ts
 "use client";
 
-import { deleteUser } from "@/lib/actions/User.actions";
+import { deleteUser, toggleUserBan } from "@/lib/actions/User.actions";
 import {
   fetchPaginatedLinksForAdmin,
   fetchPaginatedNotesForAdmin,
@@ -67,6 +67,21 @@ export function useAdminUsers({
 export function useDeleteUser() {
   return useMutation({
     mutationFn: deleteUser,
+  });
+}
+
+export function useToggleUserBan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ userId, ban }: { userId: string; ban: boolean }) => {
+      return await toggleUserBan(userId, ban);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (error) => {
+      console.error("Toggle user ban error:", error);
+    },
   });
 }
 
